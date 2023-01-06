@@ -1,0 +1,13 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using SAP.Middleware.Connector;
+global using Newtonsoft.Json.Linq;
+global using GenericTypes.Responses;
+global using GenericTypes.Constants;
+global using QueryStructures.RFCStructures;
+global using System.Linq;
+global using GenericTypes.Languages;
+global using System.Configuration;
+global using System.IO;
+global using Newtonsoft.Json;
+global using System.Data;

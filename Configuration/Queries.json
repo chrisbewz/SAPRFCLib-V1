@@ -1,0 +1,65 @@
+{
+    "ClientName_Query": {
+        "RFC_FUNCTION": "RFC_READ_TABLE",
+        "DELIMITER": ";",
+        "FIELD_NAMES": {
+            "DEFAULT": [ "NAME1" ]
+        }
+    },
+    "Tables": {
+        "General_Materials": "MARA",
+        "Client_Description": "VBAP",
+        "Client_PO_Data": "VBAK",
+        "Client_Name_Table": "KNA1"
+    },
+    "MATERIAL": {
+        "DELIMITER": "-",
+        "FIELDS": {
+            "DEFAULT": [ "MATNR", "LABOR", "ERNAM", "LAEDA", "MTART", "NTGEW", "MANDT", "KUNNR" ]
+        },
+        "TABLE": "MARA",
+        "OPTIONS": {
+            "QUERY_STR": ""
+        }
+    },
+    "POFROMMAT": {
+        "DELIMITER": "-",
+        "FIELDS": {
+            "DEFAULT": [ "VBELN" ]
+        },
+        "TABLE": "VBAP",
+        "OPTIONS": {
+            "QUERY_STR": ""
+        }
+    },
+    "CLFROMPO": {
+        "DELIMITER": "-",
+        "FIELDS": {
+            "DEFAULT": [ "KUNNR" ]
+        },
+        "TABLE": "VBAK",
+        "OPTIONS": {
+            "QUERY_STR": ""
+        }
+    },
+    "CLNAMEFROMCL": {
+        "DELIMITER": "-",
+        "FIELDS": {
+            "DEFAULT": [ "NAME1", "ORT01" ]
+        },
+        "TABLE": "KNA1",
+        "OPTIONS": {
+            "QUERY_STR": ""
+        }
+    },
+    "MATERIALDESC": {
+        "DELIMITER": "-",
+        "FIELDS": {
+            "DEFAULT": [ "MATNR", "MAKTX", "MAKTG" ]
+        },
+        "TABLE": "MAKT",
+        "OPTIONS": {
+            "QUERY_STR": ""
+        }
+    }
+}

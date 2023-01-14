@@ -1,5 +1,3 @@
-C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.AssemblyReference.cache
-C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.CoreCompileInputs.cache
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\SAPRFCLib.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\SAPRFCLib.pdb
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\GenericTypes.dll
@@ -10,6 +8,8 @@ C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\GenericTypes.p
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\RFCQueryStructures.pdb
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\TransformationHelpers.pdb
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.AssemblyReference.cache
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.CoreCompileInputs.cache
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.CopyComplete
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.pdb

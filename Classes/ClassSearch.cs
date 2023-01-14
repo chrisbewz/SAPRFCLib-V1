@@ -5,136 +5,138 @@ namespace SAPRFC.Classes
 {
     public partial class Functions
     {
-                public BaseResponse<Dictionary<string, DataTable>> VCSearch(Dictionary<string, string> SelectionCriteria)
+        public BaseResponse<DataSet> SearchObjects(string clsname, string clstype, char allvalues = 'X', int maxhits = 100,bool noauth = true, char mafid = 'O', bool externalview = true,DataTable SelectionCriteria = null)
         {
-            Dictionary<string, DataTable> DataReturn = new Dictionary<string, DataTable>();
+            DataSet res = new DataSet();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_CLASS_SELECT_OBJECTS");
+            IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
+            IRfcTable OptionsTable = Function.GetTable("IT_SELECTION_TABLE");
 
-
-            IRfcTable Criteria = Function.GetTable("SELECTIONCRITERIONS");
-            Criteria.Append();
-
-            Dictionary<string, string> Criterions = new Dictionary<string, string>()
+            if (!(SelectionCriteria is null))
             {
-                {"NAME_CHAR" ,"System.String"},
-                {"CHAR_VALUE","System.String" },
-                {"NUM_VAL_FM","System.Int32" },
-                {"NUM_VAL_TO","System.Int32"}
-            };
-
-            Function.SetValue("LANGUINT", Constants.PTLang.ToString());
-            foreach (KeyValuePair<string, string> c in SelectionCriteria)
-            {
-                try
+                foreach (DataRow item in SelectionCriteria.Rows)
                 {
-
-
-                    if (c.Key.Equals("CLASS_CODE"))
-                    {
-                        Function.SetValue("CLASSTYPE", c.Value.ToString());
-
-                    }
-                    else if (c.Key.Equals("CLASS_NAME"))
-                    {
-                        Function.SetValue("CLASSNUM", c.Value.ToString());
-                    }
-                    else if (c.Key.Equals("MAX_LIMIT"))
-                    {
-                        if ((c.Key == "MAX_LIMIT"))
-                        {
-                            Function.SetValue("MAXHITS", c.Value.ToString());
-                        }
-                        else
-                        {
-                            //Limita a Quantidade de dados retornados
-                            Function.SetValue("MAXHITS", Constants.VCSearchChunkSize.ToString());
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            Criteria.SetValue("NAME_CHAR", c.Key.ToString());
-                            Criteria.SetValue("CHAR_VALUE", c.Value.ToString());
-                            Criteria.Append();
-                        }
-                        catch
-                        {
-                            continue;
-                        }
-                        
-                    }
-                }
-                catch
-                {
-                    return new BaseResponse<Dictionary<string, DataTable>>
-                    {
-                        Data = null,
-                        Message = ResponseStatus.InvalidParameters.Message,
-                        StatusCode = ResponseStatus.InvalidParameters
-
-                    };
+                    OptionsTable.Append();
+                    OptionsTable.SetValue("CHARACTERISTIC",item["CHARACTERISTIC"].ToString());
+                    OptionsTable.SetValue("VALUE",item["VALUE"].ToString());
 
                 }
             }
-
-            Function.Invoke(rfcDestination);
-
-            IRfcTable ReturnTable = Function.GetTable("SELECTEDOBJECTS");
-
-            DataReturn.Add("Response", ConvertRFCTable(ReturnTable));
-
-            return new BaseResponse<Dictionary<string, DataTable>>
+            else
             {
-                Data = DataReturn,
-                Message = ResponseStatus.Success.Message,
-                StatusCode = ResponseStatus.Success
-            };
-        }
-
-        public BaseResponse<Dictionary<string, DataTable>> GetClassChararteristics(string ClassName,string ClassNumber)
-        {
-            Dictionary<string, DataTable> ClassValues = new Dictionary<string, DataTable>();
-
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_CLASS_GET_CHARACTERISTICS");
-
-            Function.SetValue("CLASSTYPE",ClassNumber);
-            Function.SetValue("CLASSNUM", ClassName);
-
-            Function.Invoke(rfcDestination);
-
-            try
-            {
-
-                //Getting Material Tables
-
-                IRfcTable ClassCharacteristics = Function.GetTable("CHARACTERISTICS");
-                IRfcTable ClassAllowedValues= Function.GetTable("CHAR_VALUES");
-
-                //Parsing Tables
-                ClassValues["CLS-CHARAC"] = ConvertRFCTable(ClassCharacteristics);
-                ClassValues["CLS-ALLOWED"] = ConvertRFCTable(ClassAllowedValues);
-            }
-            catch (Exception ex)
-            {
-
-                return new BaseResponse<Dictionary<string, DataTable>>
+                return new BaseResponse<DataSet>()
                 {
                     Data = null,
-                    Message = string.Format("Message:{0}", ResponseStatus.RFCError.Message),
-                    StatusCode = ResponseStatus.RFCError
+                    Message = "Busca sem parâmetros não permitida",
+                    StatusCode = ResponseStatus.InvalidParameters
                 };
             }
 
-            return new BaseResponse<Dictionary<string, DataTable>>
+            Function.SetValue("I_CLASS", clsname);
+            Function.SetValue("I_CLASSTYPE", clstype);
+            Function.SetValue("I_MAXIMUM_NUMBER_OF_HITS", maxhits);
+
+            if (externalview)
             {
-                Data = ClassValues,
-                Message = ResponseStatus.Success.Message,
+                Function.SetValue("I_EXTERNAL_VIEW", 'X');
+            }
+
+            if (noauth)
+            {
+                Function.SetValue("I_NO_AUTH_CHECK", 'X');
+            }
+
+            Function.SetValue("I_MAFID", mafid);
+            Function.SetValue("I_ALL_VALUES", allvalues);
+
+            Function.Invoke(rfcDestination);
+
+            DataTable SelectionTable = ConvertRFCTable(Function.GetTable("IT_SELECTION_TABLE"));
+            DataTable FoundObj1 = ConvertRFCTable(Function.GetTable("ET_OBJECTS"));
+            DataTable FoundCharac1 = ConvertRFCTable(Function.GetTable("ET_VALUES"));
+            DataTable FoundObj2 = ConvertRFCTable(Function.GetTable("ET_OBJECTS_EXTERNAL_VIEW"));
+            DataTable FoundCharac2 = ConvertRFCTable(Function.GetTable("ET_VALUES_EXTERNAL_VIEW"));
+
+            res.Tables.Add(SelectionTable);
+            res.Tables.Add(FoundObj1);
+            res.Tables.Add(FoundObj2);
+            res.Tables.Add(FoundCharac1);
+            res.Tables.Add(FoundCharac2);
+
+            return new BaseResponse<DataSet>()
+            {
+                Data = res,
+                Message = $"Contagem de Filtros : {SelectionTable.Rows.Count}. Resultados Encontrados{FoundObj1.Rows.Count}",
                 StatusCode = ResponseStatus.Success
             };
-
-
         }
+
+        public BaseResponse<DataSet> ClassObjects(string ClassType, string ClassName,Dictionary<string,string> SelectionParameters = null,string MaxHits = "999",bool IgnoreOptions = true)
+        { 
+            DataSet DataReturn = new DataSet();
+
+            IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLSX_SEARCH_OBJECTS");
+            
+            //Commom Parameters
+            Function.SetValue("I_CLASS",ClassName);
+            Function.SetValue("I_CLASSTYPE",ClassType);
+            Function.SetValue("I_MAXIMUM_NUMBER_OF_HITS",MaxHits);
+            
+            Function.SetValue("I_EXTERNAL_VIEW",'X');
+            Function.SetValue("I_ALL_VALUES",'X');
+            Function.SetValue("I_NO_AUTH_CHECK",'X');
+            Function.SetValue("I_SUBCLASSES",'X');
+
+            if (!(IgnoreOptions))
+            {
+                IRfcTable OptionsCriteria = Function.GetTable("IT_SELECTION_TABLE");
+                OptionsCriteria.Append();
+
+                if (SelectionParameters is null)
+                {
+                    throw new NullReferenceException();
+                }
+                else
+                {
+                    foreach (string item in SelectionParameters.Keys.ToList())
+                    {
+                        if (!(item.Equals(SelectionParameters.Keys.ToList().Last())))
+                        {
+                            OptionsCriteria.SetValue("CHARACTERISTIC",item.ToString());
+                            OptionsCriteria.Append();
+                            OptionsCriteria.SetValue("VALUE",SelectionParameters[item].ToString());
+                            OptionsCriteria.Append();
+                        }
+                        else
+                        {
+                            OptionsCriteria.SetValue("CHARACTERISTIC","item");
+                            OptionsCriteria.SetValue("VALUE",SelectionParameters[item].ToString());
+                        }
+                    }
+                }
+            }
+            
+            Function.Invoke(rfcDestination);
+            
+
+            DataReturn.Tables.Add(ConvertRFCTable(Function.GetTable("ET_OBJECTS")));
+            DataReturn.Tables.Add(ConvertRFCTable(Function.GetTable("ET_VALUES")));
+            DataReturn.Tables.Add(ConvertRFCTable(Function.GetTable("ET_OBJECTS_EXTERNAL_VIEW")));
+            DataReturn.Tables.Add(ConvertRFCTable(Function.GetTable("ET_VALUES_EXTERNAL_VIEW")));
+            DataReturn.Tables.Add(ConvertRFCTable(Function.GetTable("IT_SELECTION_TABLE")));
+
+            return new BaseResponse<DataSet>()
+            {
+                Data = DataReturn,
+
+            };
+        }
+
+
+        public void FindObjects(string ClassType, string ClassName)
+        {
+            
+        }
+
     }
 }

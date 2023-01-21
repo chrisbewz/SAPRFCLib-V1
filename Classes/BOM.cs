@@ -1,5 +1,6 @@
-﻿
-using System.Data;
+﻿using System.Data;
+
+
 
 namespace SAPRFC.Classes
 {
@@ -11,7 +12,7 @@ namespace SAPRFC.Classes
             try
             {
                 RFCReadParameters.MAST.SetWhereClauses($"MATNR = '{Material}'",true);
-                check.Merge(base.ReadingTable(RFCReadParameters.MAST).Data);
+                check.Merge(ReadingTable(RFCReadParameters.MAST).Data);
 
                 if(check.Rows.Count is (0))
                 {
@@ -93,7 +94,7 @@ namespace SAPRFC.Classes
                     Function.Invoke(rfcDestination);
 
                     //Fetching BOM Names
-                    DataTable bomItems = base.ConvertRFCTable(Function.GetTable("T_STPO"));
+                    DataTable bomItems = TableParsing.ConvertRFCTable(Function.GetTable("T_STPO"));
                     List<string> Materials = bomItems.AsEnumerable().Select(S => S.Field<string>("COMPONENT")).ToList();
                     DataTable MaterialNames = new DataTable();
 
@@ -103,7 +104,7 @@ namespace SAPRFC.Classes
                         try
                         {
                             RFCReadParameters.MAKT.SetWhereClauses($"MATNR =  '{Constants.MaterialSeparator}{item}' AND SPRAS = '{SAPLanguages.Portuguese.SPRAS_CODE}' ", true);
-                            BaseResponse<DataTable> maraDescr = base.ReadingTable(RFCReadParameters.MAKT);
+                            BaseResponse<DataTable> maraDescr = ReadingTable(RFCReadParameters.MAKT);
                             MaterialNames.Merge(maraDescr.Data);
                         }
                         catch
@@ -156,15 +157,15 @@ namespace SAPRFC.Classes
                     //Fetching all data relative to BOM Material
                     BOMResponse.Tables.Add(FinalItems);
                     //BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_STPO")));
-                    BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_STKO")));
-                    BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_DEP_DESCR")));
-                    BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_DEP_ORDER")));
-                    BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_DEP_DATA")));
-                    BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_DEP_DOC")));
-                    BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_DEP_SOURCE")));
+                    BOMResponse.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("T_STKO")));
+                    BOMResponse.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("T_DEP_DESCR")));
+                    BOMResponse.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("T_DEP_ORDER")));
+                    BOMResponse.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("T_DEP_DATA")));
+                    BOMResponse.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("T_DEP_DOC")));
+                    BOMResponse.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("T_DEP_SOURCE")));
 
                     //Fetching document assignment
-                    BOMResponse.Tables.Add(base.ConvertRFCTable(Function.GetTable("T_DOC_LINK")));
+                    BOMResponse.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("T_DOC_LINK")));
                 }
             }
             catch (Exception ex)

@@ -1,112 +1,13 @@
-﻿
-
+﻿using ParsingUtils.DataTables;
+using ParsingUtils.JSON;
 using System.Data;
+
 
 namespace SAPRFC.Classes
 {
-    public class FetchData : Destination
+    
+    public partial class Functions
     {
-        
-        private JObject _queryParameters;
-        private JObject _tooltips;
-        private JObject _sqlQueries;
-        private JObject _matches;
-        public FetchData()
-        {
-            this._queryParameters = JSONParse(ConfigurationManager.AppSettings["QUERIES_JSON"]);
-            this._tooltips = JSONParse(ConfigurationManager.AppSettings["TIPS_JSON"]);
-            this._sqlQueries = JSONParse(ConfigurationManager.AppSettings["SQL_CHAR_QUERIES"]);
-            this._matches = JSONParse(ConfigurationManager.AppSettings["SQL_CHAR_MATCHES"]);
-        }
-        public DataTable ConvertRFCTable(IRfcTable SAPTable)
-        {
-            DataTable DotNetTable = new DataTable();
-
-            for (int RfcTableItem = 0; RfcTableItem < SAPTable.ElementCount; RfcTableItem++)
-            {
-                RfcElementMetadata TableElementData = SAPTable.GetElementMetadata(RfcTableItem);
-                DotNetTable.Columns.Add(TableElementData.Name);
-
-            }
-
-            foreach (IRfcStructure RfcTableRow in SAPTable)
-            {
-                DataRow Tablerow = DotNetTable.NewRow();
-
-                for (int RfcTableItem = 0; RfcTableItem < SAPTable.ElementCount; RfcTableItem++)
-                {
-                    RfcElementMetadata TableElementData = SAPTable.GetElementMetadata(RfcTableItem);
-                    if (TableElementData.DataType == RfcDataType.BCD && TableElementData.Name == "ABC")
-                    {
-                        Tablerow[RfcTableItem] = RfcTableRow.GetInt(TableElementData.Name);
-                    }
-                    else
-                    {
-                        Tablerow[RfcTableItem] = RfcTableRow.GetString(TableElementData.Name);
-
-                    }
-
-                }
-                DotNetTable.Rows.Add(Tablerow);
-            }
-            return DotNetTable;
-        }
-        public JObject JSONParse(string fileName)
-        {
-            JObject o2;
-            // read SON directly from a file
-            StreamReader file = File.OpenText(String.Format(fileName));
-            
-            using (JsonTextReader reader = new JsonTextReader(file))
-            {
-                 o2 = (JObject)JToken.ReadFrom(reader);
-            }
-
-            return o2;
-        }
-
-        protected JObject Parameters(FetchData instance)
-        {
-            return instance._queryParameters;
-        }
-
-        public JObject GetTips(FetchData instance)
-        {
-            return instance._tooltips;
-        }
-
-        public JObject GetQueries(FetchData instance)
-        {
-            return instance._sqlQueries;
-        }
-
-        public JObject GetMatches(FetchData instance)
-        {
-            return instance._matches;
-        }
-
-    }
-
-    public class Tables : FetchData
-    {
-        private JObject _parameters;
-        public Tables():base()
-        {
-            this._parameters = base.Parameters(this);
-        }
-
-        public JObject GetParameters()
-        {
-            try
-            {
-                return this._parameters;
-            }
-            catch (Exception)
-            {
-                throw new Exception();
-            }
-
-        }
         public BaseResponse<Dictionary<string, string>> ReadTable(JObject Parameters, string QueryID, List<string> ClauseArgs = null, string TableReader = "RFC_READ_TABLE", string ParametersType = "DEFAULT",string Clauses = "Single")
         {
             Dictionary<string, string> DataTableReturn = new Dictionary<string, string>();
@@ -121,10 +22,7 @@ namespace SAPRFC.Classes
 
             try
             {
-                if (Function != null)
                 {
-                    //Setting SAPImport Tables Parameters
-
 
                     if (!(Parameters[QueryID]["TABLE"] is null))
                     {
@@ -179,15 +77,13 @@ namespace SAPRFC.Classes
                                 }
                                 else
                                 {
-                                    OptionsTable.SetValue("TEXT", conditions.ToString());
+                                    OptionsTable.SetValue("TEXT", conditions);
                                 }
                                 
                             }
                         }
                         
                     }
-
-                    //Case Fields are Null
                     else if (Parameters[QueryID]["FIELDS"] is null)
                     {
                         return new BaseResponse<Dictionary<string, string>>
@@ -198,8 +94,6 @@ namespace SAPRFC.Classes
 
                         };
                     }
-
-                    //Case Fields are Null
                     else if (Parameters[QueryID]["TABLE"] is null)
                     {
                         return new BaseResponse<Dictionary<string, string>>
@@ -210,8 +104,6 @@ namespace SAPRFC.Classes
 
                         };
                     }
-
-                    //Case Options are Null
                     else if (Parameters[QueryID]["OPTIONS"] is null)
                     {
                         return new BaseResponse<Dictionary<string, string>>
@@ -224,13 +116,7 @@ namespace SAPRFC.Classes
                     }
                     Function.Invoke(rfcDestination);
 
-                    //try
-                    //{
-
-                    //Fetching RFC Messages and Exceptions
-                    //IRfcTable MessageTable = Function.GetTable("");
                     IRfcTable DataReadTable = Function.GetTable("DATA");
-                    Dictionary<string, string> ResponseData = new Dictionary<string, string>();
 
                     foreach (var DataRowContent in DataReadTable)
                     {
@@ -256,18 +142,6 @@ namespace SAPRFC.Classes
 
                         }
                     }
-                    //}
-                    //catch (Exception ex)
-                    //{
-
-                    //    return new BaseResponse<Dictionary<string, string>>
-                    //    {
-                    //        Data = null,
-                    //        StatusCode = ResponseStatus.Empty,
-                    //        Message = ResponseStatus.Empty.Message
-                    //    };
-                    //}
-
                 }
             }
             catch (Exception ex)
@@ -292,7 +166,6 @@ namespace SAPRFC.Classes
 
         public BaseResponse<DataTable> ReadingTable(RFCReadParameters Parameters, string QueryString = null, string FieldSelection = "DEFAULT",  string TableReader = "RFC_READ_TABLE", string ReadMode = "Single")
         {
-            Dictionary<string, DataTable> DataTableReturn = new Dictionary<string, DataTable>();
             DataTable ReturnData = new DataTable();
 
             try
@@ -304,8 +177,6 @@ namespace SAPRFC.Classes
 
                 IRfcTable OptionsTable = Function.GetTable("OPTIONS");
                 OptionsTable.Append();
-
-                //Setting function params
 
                 if (Parameters.Fields[FieldSelection].Any())
                 {
@@ -331,10 +202,7 @@ namespace SAPRFC.Classes
                         {
                             try 
                             {
-                                //Assuming that exist at least one Clause on Options list, or if it's set at runtime in code
-                                //Then only the first element is used
                                 OptionsTable.SetValue("TEXT", Parameters.Options[0]);
-
                             }
                             catch
                             {
@@ -378,22 +246,16 @@ namespace SAPRFC.Classes
                     }
                 }
 
-                //Setting commom import parameters for RFC_READ_TABLE
-
                 Function.SetValue("QUERY_TABLE", Parameters.Table);
                 Function.SetValue("ROWCOUNT", Parameters.RowCount.ToString());
                 Function.SetValue("ROWSKIPS", Parameters.RowSkip.ToString());
                 Function.SetValue("DELIMITER", Parameters.GetDelimiter());
-
-                //Invoking RFC_READ_TABLE from RFC SAP destination repository
+                
                 Function.Invoke(rfcDestination);
 
-                //Fetching response
-
                 IRfcTable DataReadTable = Function.GetTable("DATA");
-                Dictionary<string, string> ResponseData = new Dictionary<string, string>();
 
-                //Instantiating the return data structure
+                
                 int FieldsLenght = Parameters.Fields[FieldSelection].Count;
                 foreach (string ColumnAlias in Parameters.GetFields(FieldSelection))
                 {
@@ -402,11 +264,9 @@ namespace SAPRFC.Classes
 
                 foreach (var DataRowContent in DataReadTable)
                 {
-                    //Fetch Individual Lines os WA return structure
                     string RowContent = DataRowContent.GetValue("WA").ToString();
                     var LineChunks = RowContent.Split(Parameters.GetDelimiter());
-
-                    //Passing Line Contents to Datatable
+                    
                     DataRow Row;
                     Row = ReturnData.NewRow();
 
@@ -447,7 +307,6 @@ namespace SAPRFC.Classes
         }
         public BaseResponse<DataTable> TableFromReadTable(JObject Parameters, string QueryID, List<string> ClauseArgs = null, string TableReader = "RFC_READ_TABLE", string ParametersType = "DEFAULT", string Clauses = "Single")
         {
-            Dictionary<string, DataTable> DataTableReturn = new Dictionary<string, DataTable>();
             DataTable ReturnData = new DataTable();
 
             IRfcFunction Function = rfcDestination.Repository.CreateFunction(TableReader);
@@ -462,9 +321,6 @@ namespace SAPRFC.Classes
             {
                 if (Function != null)
                 {
-                    //Setting SAPImport Tables Parameters
-
-
                     if (!(Parameters[QueryID]["TABLE"] is null))
                     {
                         Function.SetValue("QUERY_TABLE", Parameters[QueryID]["TABLE"].ToString());
@@ -520,13 +376,10 @@ namespace SAPRFC.Classes
                                 {
                                     OptionsTable.SetValue("TEXT", conditions.ToString());
                                 }
-
                             }
                         }
 
                     }
-
-                    //Case Fields are Null
                     else if (Parameters[QueryID]["FIELDS"] is null)
                     {
                         return new BaseResponse<DataTable>
@@ -537,8 +390,6 @@ namespace SAPRFC.Classes
 
                         };
                     }
-
-                    //Case Fields are Null
                     else if (Parameters[QueryID]["TABLE"] is null)
                     {
                         return new BaseResponse<DataTable>
@@ -549,8 +400,6 @@ namespace SAPRFC.Classes
 
                         };
                     }
-
-                    //Case Options are Null
                     else if (Parameters[QueryID]["OPTIONS"] is null)
                     {
                         return new BaseResponse<DataTable>
@@ -566,8 +415,6 @@ namespace SAPRFC.Classes
                     IRfcTable DataReadTable = Function.GetTable("DATA");
                     Dictionary<string, string> ResponseData = new Dictionary<string, string>();
 
-                    //Instantiating the return data structure
-
                     int FieldsLenght = Parameters[QueryID]["FIELDS"][ParametersType].ToArray().Length;
 
                     foreach (string ColumnAlias in Parameters[QueryID]["FIELDS"][ParametersType].ToArray())
@@ -577,12 +424,10 @@ namespace SAPRFC.Classes
 
                     foreach (var DataRowContent in DataReadTable)
                     {
-                        //Fetch Individual Lines os WA return structure
                         string RowContent = DataRowContent.GetValue("WA").ToString();
                         char Delimiter = (char)Parameters[QueryID]["DELIMITER"];
                         var LineChunks = RowContent.Split(Delimiter);
-
-                        //Passing Line Contents to Datatable
+                        
                         DataRow Row; 
                         Row = ReturnData.NewRow();
 
@@ -617,8 +462,6 @@ namespace SAPRFC.Classes
                 };
             }
 
-            //DataTableReturn.Add("Response", ReturnData);
-
             return new BaseResponse<DataTable>
             {
                 Data = ReturnData,
@@ -644,27 +487,6 @@ namespace SAPRFC.Classes
               .ToDictionary<DataRow, string, object>(row => row.Field<string>(0),
                                         row => row.Field<object>(1));
         }
-
-
-        public List<Dictionary<string, object>> DataTableToDictionaries(DataTable dt)
-        {
-            var dictionaries = new List<Dictionary<string, object>>();
-            foreach (DataRow row in dt.Rows)
-            {
-                Dictionary<string, object> dictionary = Enumerable.Range(0, dt.Columns.Count).ToDictionary(i => dt.Columns[i].ColumnName, i => row.ItemArray[i]);
-                dictionaries.Add(dictionary);
-            }
-
-            return dictionaries;
-        }
-
-        public DataTable RemoveDuplicatesRecords(DataTable dt)
-        {
-            //Returns just 5 unique rows
-            var UniqueRows = dt.AsEnumerable().Distinct(DataRowComparer.Default);
-            DataTable dt2 = UniqueRows.CopyToDataTable();
-            return dt2;
-        }
-
+        
     }
 }

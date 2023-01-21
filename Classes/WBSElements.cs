@@ -1,5 +1,6 @@
 ﻿using System.Data;
 
+
 namespace SAPRFC.Classes
 {
     public partial class Functions
@@ -20,7 +21,7 @@ namespace SAPRFC.Classes
                     IRfcFunction Function = RFCRepo.CreateFunction("BAPI_PROJECT_GETINFO");
                     Function.SetValue("PROJECT_DEFINITION", WBSelements);
                     Function.Invoke(rfcDestination);
-                    Response.Merge(base.ConvertRFCTable(Function.GetTable("E_WBS_ELEMENT_TABLE")),true);
+                    Response.Merge(TableParsing.ConvertRFCTable(Function.GetTable("E_WBS_ELEMENT_TABLE")),true);
                 }
 
             }
@@ -38,18 +39,18 @@ namespace SAPRFC.Classes
             {
                 Data = Response,
                 StatusCode = ResponseStatus.Success,
-                Message = string.Format("{0}. Table contains [ Rows {1} : Columns {2} ]", ResponseStatus.Success.Message,Response.Rows.Count, Response.Columns.Count)
+                Message = $"{ResponseStatus.Success.Message}. Table contains [ Rows {Response.Rows.Count} : Columns {Response.Columns.Count} ]"
             };
         }
 
         public BaseResponse<Dictionary<string, string>> GetPEP(string MaterialNumber, string SearchOption = "DEFAULT")
         {
-            JObject MaterialParams = GetParameters();
+            
 
             string QueryType = "WBS_ELEM";
-            MaterialParams[QueryType]["OPTIONS"]["QUERY_STR"] = string.Format("KUNNR EQ '{0}'", MaterialNumber);
+            Parameters[QueryType]["OPTIONS"]["QUERY_STR"] = $"KUNNR EQ '{MaterialNumber}'";
 
-            return ReadTable(MaterialParams, QueryType, ParametersType: SearchOption);
+            return ReadTable(Parameters, QueryType, ParametersType: SearchOption);
         }
     }
 }

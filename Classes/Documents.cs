@@ -2,6 +2,7 @@
 using GenericTypes.Documents;
 using Helpers.Data;
 
+
 namespace SAPRFC.Classes
 {
     public partial class Functions
@@ -33,7 +34,7 @@ namespace SAPRFC.Classes
 
             return new BaseResponse<DataTable>()
             {
-                Data = base.ConvertRFCTable(Function.GetTable("DOCUMENTLIST")),
+                Data = TableParsing.ConvertRFCTable(Function.GetTable("DOCUMENTLIST")),
                 Message = ResponseStatus.Success.Message,
                 StatusCode = ResponseStatus.Success
 
@@ -121,7 +122,7 @@ namespace SAPRFC.Classes
                 
                 //Fetching all needed response tables
 
-                DataTable Files = ConvertRFCTable(Function.GetTable("DOCUMENTFILES"));
+                DataTable Files = TableParsing.ConvertRFCTable(Function.GetTable("DOCUMENTFILES"));
 
                 var filesData = Files.AsEnumerable().Select(x => new
                 {

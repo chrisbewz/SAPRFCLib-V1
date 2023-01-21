@@ -11,3 +11,5 @@ global using System.Configuration;
 global using System.IO;
 global using Newtonsoft.Json;
 global using System.Data;
+global using JSONParsing = ParsingUtils.JSON.Parsing;
+global using TableParsing = ParsingUtils.DataTables.Parsing;

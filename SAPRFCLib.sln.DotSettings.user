@@ -1,5 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CChristianb_005CRiderProjects_005CDevelopment_005CDataBridge_005Cbin_005CDebug_005CDataBridge_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CChristianb_005CRiderProjects_005CDevelopment_005CGenericTypes_005CGenericTypes_005Cbin_005CDebug_005CGenericTypes_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CChristianb_005CRiderProjects_005CDevelopment_005CParsingUtils_005Cbin_005CDebug_005CParsingUtils_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CChristianb_005CRiderProjects_005CDevelopment_005CRFCQueryStructures_005Cbin_005CDebug_005CRFCQueryStructures_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CChristianb_005CRiderProjects_005CDevelopment_005CSAPRFCLib_005Cbin_005CDebug_005Csapnco_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CChristianb_005CRiderProjects_005CDevelopment_005CSAPRFCLib_005Cbin_005CDebug_005Csapnco_005Futils_002Edll/@EntryIndexedValue">True</s:Boolean>
@@ -7,5 +9,7 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\sapnco.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\sapnco_utils.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\Christianb\RiderProjects\Development\DataBridge\bin\Debug\DataBridge.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\Christianb\RiderProjects\Development\GenericTypes\GenericTypes\bin\Debug\GenericTypes.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/SolBuilderDuo/UseMsbuildSolutionBuilder/@EntryValue">No</s:String></wpf:ResourceDictionary>

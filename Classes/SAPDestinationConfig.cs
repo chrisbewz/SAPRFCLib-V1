@@ -1,6 +1,5 @@
-﻿using System;
-using SAP.Middleware.Connector;
-using System.Configuration;
+﻿
+using System.Runtime.CompilerServices;
 
 namespace SAPRFC.Classes
 {
@@ -33,40 +32,53 @@ namespace SAPRFC.Classes
 
     public class Middleware
     {
-        public RfcDestination rfcDestination;
+        
         private readonly string _destinationName;
+        public RfcDestination _rfcDestination { get; set; }
 
         public Middleware()
         {
             this._destinationName = ConfigurationManager.AppSettings["SAP_SYSTEM_NAME"];
+            this._rfcDestination = GetDestination();
         }
-
-        protected string DestinationName(Middleware instance)
+    
+        private string DestinationName(Middleware instance)
         {
             return instance._destinationName; 
         }
-    }
-
-    public class Destination : Middleware
-    {
-        private readonly string Name;
-        public Destination() : base()
-        {
-            this.Name = base.DestinationName(this);
-            base.rfcDestination = this.GetDestination();
-        }
-        public RfcDestination GetDestination()
+        
+        private RfcDestination GetDestination()
         {
             try
             {
-                return RfcDestinationManager.GetDestination(this.Name);
+                return RfcDestinationManager.GetDestination(DestinationName(this));
             }
             catch (Exception)
             {
-
                 throw new Exception();
             }
             
         }
     }
+
+    // public static class Middleware
+    // {
+    //     public static RfcDestination _rfcDestination = GetDestination();
+    //     private static string _destinationName = ConfigurationManager.AppSettings["SAP_SYSTEM_NAME"];
+    //     
+    //     private static RfcDestination GetDestination()
+    //     {
+    //         try
+    //         {
+    //             return RfcDestinationManager.GetDestination(_destinationName);
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             throw new Exception($"{ex.Message}");
+    //         }
+    //         
+    //     }
+    //     
+    // }
+
 }

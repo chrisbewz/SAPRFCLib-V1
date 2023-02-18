@@ -1,3 +1,5 @@
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.AssemblyReference.cache
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.CoreCompileInputs.cache
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\SAPRFCLib.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\SAPRFCLib.pdb
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\DataBridge.dll
@@ -5,6 +7,8 @@ C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\GenericTypes.d
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\ParsingUtils.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\RFCQueryStructures.dll
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\sapnco.dll
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\sapnco_utils.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\TransformationHelpers.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\DataBridge.pdb
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\GenericTypes.pdb
@@ -12,8 +16,6 @@ C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\Newtonsoft.Jso
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\ParsingUtils.pdb
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\RFCQueryStructures.pdb
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\TransformationHelpers.pdb
-C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.AssemblyReference.cache
-C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.CoreCompileInputs.cache
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.csproj.CopyComplete
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.dll
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\obj\Debug\SAPRFCLib.pdb

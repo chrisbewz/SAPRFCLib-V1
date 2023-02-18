@@ -174,7 +174,35 @@ namespace SAPRFC.Classes
 
             };
         }
+        public BaseResponse<DataSet> GetMaterialInformation(string material, string classType, string className, string objTable = "MARA")
+        {
+            IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_OBJCL_GETDETAIL");
 
+            // RFCReadParameters readParameters = RFCReadParameters.AUSP;
+            // readParameters.InsertFields(new List<string> { "CUOBF", "MATNR" }, "TEMP");
+            // readParameters.SetWhereClauses($"MATNR = '0000000000{material}'", true);
+            // var responseSearch = ReadingTable(readParameters, null, "TEMP");
+            // var objKey = responseSearch.Data.Rows[0].Field<string>("CUOBF");
+
+            Function.SetValue("OBJECTKEY", material);
+            Function.SetValue("OBJECTTABLE", objTable);
+            Function.SetValue("CLASSTYPE", classType);
+            Function.SetValue("CLASSNUM", className);
+
+            Function.Invoke(rfcDestination);
+
+            DataSet result = new DataSet();
+
+            result.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("ALLOCVALUESNUM")));
+            result.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("ALLOCVALUESCHAR")));
+            result.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("ALLOCVALUESCURR")));
+
+            return new BaseResponse<DataSet>()
+            {
+                Data = result
+            };
+
+        }
 
         public void FindObjects(string ClassType, string ClassName)
         {

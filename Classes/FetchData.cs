@@ -1,9 +1,4 @@
-﻿using ParsingUtils.DataTables;
-using ParsingUtils.JSON;
-using System.Data;
-
-
-namespace SAPRFC.Classes
+﻿namespace SAPRFC.Classes
 {
     
     public partial class Functions

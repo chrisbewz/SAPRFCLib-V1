@@ -1,33 +1,25 @@
 ﻿
-using System.Data;
-using System.Runtime.CompilerServices;
-using DataBridge;
+using System.ComponentModel;
+using SAPRFCLib.Interfaces;
 
 
 namespace SAPRFC.Classes
 {
-    public partial class Functions
+    public partial class Functions: IFunctions
     {
-        private RfcDestination rfcDestination;
+        public RfcDestination rfcDestination { get; set; }
         private JObject Parameters;
-
-        public Functions()
-        {
-             var bridge = new Middleware();
-             var data = new Bindings();
-             this.rfcDestination = bridge._rfcDestination;
-             this.Parameters = data.Parameters();
-        }
+        
         public BaseResponse<Dictionary<string,string>> GetMatData(string MaterialNumber,string SearchOption = "DEFAULT")
         {
-            
-
             string QueryType = "MATERIAL";
             Parameters[QueryType]["OPTIONS"]["QUERY_STR"] = $"MATNR = '{Constants.MaterialSeparator}{MaterialNumber}'";
 
             return ReadTable(Parameters, QueryType, ParametersType:SearchOption);
         }
-
+        
+        [Obsolete("Obsolete method.Call MaterialsInformation instead")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public BaseResponse<Dictionary<string,string>> GetMaterialDescription(string MaterialNumber,string SearchOption = "DEFAULT")
         {
             string QueryType = "MATERIALDESC";
@@ -35,32 +27,41 @@ namespace SAPRFC.Classes
 
             return ReadTable(Parameters, QueryType, ParametersType: SearchOption);
         }
-
-        public BaseResponse<Dictionary<string, string>> POFromMaterial(string MaterialNumber, string SearchOption = "DEFAULT")
+        public string MaterialName(string MaterialNumber,SAPLanguages language,string SearchOption = "ALL")
         {
+            language ??= SAPLanguages.Portuguese;
+            var MAKT_PARAMS = RFCReadParameters.MAKT;
+            MAKT_PARAMS.SetWhereClauses(new List<string>()
+            {
+                $"MATNR = '{Constants.MaterialSeparator}{MaterialNumber}' AND",
+                $"SPRAS = '{language.SPRAS_CODE}'"
+            }, true);
+            
+            var returnTable = ReadingTable(MAKT_PARAMS,
+                null,
+                SearchOption,
+                "RFC_READ_TABLE","Multiple").Data;
+            var materialDesc = returnTable
+                .AsEnumerable()
+                .Select(x => x.Field<string>("MAKTX"))
+                .First()
+                .ToString();
 
-            string QueryType = "POFROMMAT";
-            Parameters[QueryType]["OPTIONS"]["QUERY_STR"] = string.Format("MATNR = '{0}{1}'", Constants.MaterialSeparator, MaterialNumber);
+            return materialDesc;
 
-            return ReadTable(Parameters, QueryType, ParametersType: SearchOption);
         }
-
-        public BaseResponse<Dictionary<string, string>> ClientNumberFromPO(string PurchaseOrder, string SearchOption = "DEFAULT")
+        
+        public BaseResponse<DataTable> MaterialsInformation(List<string> MaterialNumbers,string SearchOption="DEFAULT")
         {
-            string QueryType = "CLFROMPO";
-            Parameters[QueryType]["OPTIONS"]["QUERY_STR"] = $"VBELN = '{PurchaseOrder}'";
-
-            return ReadTable(Parameters, QueryType, ParametersType: SearchOption);
+            var MAKT_PARAMS = RFCReadParameters.MAKT;
+            
+            MAKT_PARAMS.SetWhereClauses(MaterialNumbers);
+            return ReadingTable(MAKT_PARAMS,
+                null,
+                SearchOption,
+                "RFC_READ_TABLE","Multiple");
         }
-
-        public BaseResponse<Dictionary<string, string>> ClientName(string ClientNumber, string SearchOption = "DEFAULT")
-        {
-            string QueryType = "CLNAMEFROMCL";
-            Parameters[QueryType]["OPTIONS"]["QUERY_STR"] = string.Format("KUNNR = '{0}'", ClientNumber);
-
-            return ReadTable(Parameters, QueryType, ParametersType: SearchOption);
-        }
-
+        
         public BaseResponse<Dictionary<string, DataTable>> ReadMaterial(string Material)
         {
             Dictionary<string, DataTable> DataReturn = new Dictionary<string, DataTable>();
@@ -102,7 +103,6 @@ namespace SAPRFC.Classes
 
 
         }
-        
         
     }
 }

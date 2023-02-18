@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using GenericTypes.Documents;
+﻿using GenericTypes.Documents;
 using Helpers.Data;
 
 

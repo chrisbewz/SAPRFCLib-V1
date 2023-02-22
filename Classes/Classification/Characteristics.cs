@@ -1,6 +1,4 @@
-﻿using SAPRFC.Classes;
-using GenericTypes.Languages;
-namespace SAPRFC.Classes;
+﻿namespace SAPRFC.Classes;
 using TableParsing = ParsingUtils.DataTables.Parsing;
 using StructParsing = ParsingUtils.RFC.Structures;
 

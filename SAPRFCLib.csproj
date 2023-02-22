@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\BOM.cs" />
+    <Compile Include="Classes\CharacteristicHandler.cs" />
     <Compile Include="Classes\Classification\Characteristics.cs" />
     <Compile Include="Classes\ClassSearch.cs" />
     <Compile Include="Classes\Client.cs" />
@@ -74,11 +75,8 @@
     <Compile Include="Classes\FetchData.cs" />
     <Compile Include="Classes\Constructors.cs" />
     <Compile Include="Classes\Materials.cs" />
-    <Compile Include="Classes\ConnectorInterface.cs" />
     <Compile Include="Classes\UsingDirectives.cs" />
-    <Compile Include="Classes\DestinationConfiguration.cs" />
     <Compile Include="Classes\WBS.cs" />
-    <Compile Include="Interfaces\IDestinationSet.cs" />
     <Compile Include="Interfaces\IParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

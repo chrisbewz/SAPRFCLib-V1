@@ -209,5 +209,37 @@ namespace SAPRFC.Classes
             
         }
 
+        public BaseResponse<DataSet> ClassGetDetail(string classType, string classNumber, SAPLanguages languageIsoCode = null,SAPLanguages languageSAPCode = null)
+        {
+            IRfcFunction _function = rfcDestination.Repository.CreateFunction("BAPI_CLASS_GETDETAIL");
+            
+            if(languageIsoCode != null){ _function.SetValue("LANGUISO",$"{languageIsoCode.LAIZO_CODE}");}
+            if(languageSAPCode != null) _function.SetValue("LANGUINT",$"{languageIsoCode.SPRAS_CODE}");
+            _function.SetValue("CLASSTYPE",$"{classType}");
+            _function.SetValue("CLASSNUM",$"{classNumber}");
+            
+            _function.Invoke(rfcDestination);
+
+            DataSet response = new DataSet()
+            {
+                Tables =
+                {
+                    TableParsing.ConvertRFCTable(_function.GetTable("CLASSDESCRIPTIONS")),
+                    TableParsing.ConvertRFCTable(_function.GetTable("CLASSLONGTEXTS")),
+                    TableParsing.ConvertRFCTable(_function.GetTable("CLASSCHARACTERISTICS")),
+                    TableParsing.ConvertRFCTable(_function.GetTable("CLASSCHARVALUES"))
+                }
+            };
+
+            return new BaseResponse<DataSet>()
+            {
+                Data = response,
+                Message = $"Success fetch class information data",
+                StatusCode = ResponseStatus.Success
+            };
+
+
+        }
+
     }
 }

@@ -5,7 +5,7 @@ namespace SAPRFC.Classes
 {
     public partial class Functions
     {
-        public BaseResponse<DataTable> GetWBSData(string WBSelements)
+        public BaseRFCResponse<DataTable> GetWBSData(string WBSelements)
         {
             DataTable Response = new DataTable();
             Response.TableName = "WBS_INFOS";
@@ -28,14 +28,14 @@ namespace SAPRFC.Classes
             
             catch (Exception ex)
             {
-                return new BaseResponse<DataTable>
+                return new BaseRFCResponse<DataTable>
                 {
                     Data = null,
                     StatusCode = ResponseStatus.Empty,
                     Message = ResponseStatus.Empty.Message
                 };
             }
-            return new BaseResponse<DataTable>
+            return new BaseRFCResponse<DataTable>
             {
                 Data = Response,
                 StatusCode = ResponseStatus.Success,
@@ -43,7 +43,7 @@ namespace SAPRFC.Classes
             };
         }
 
-        public BaseResponse<Dictionary<string, string>> GetPEP(string MaterialNumber, string SearchOption = "DEFAULT")
+        public BaseRFCResponse<Dictionary<string, string>> GetPEP(string MaterialNumber, string SearchOption = "DEFAULT")
         {
             
 

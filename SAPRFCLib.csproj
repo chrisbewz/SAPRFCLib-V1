@@ -48,6 +48,9 @@
     <Reference Include="RFCQueryStructures">
       <HintPath>..\RFCQueryStructures\bin\Debug\RFCQueryStructures.dll</HintPath>
     </Reference>
+    <Reference Include="RuntimeHelpers">
+      <HintPath>..\RuntimeHelpers\bin\Debug\net48\RuntimeHelpers.dll</HintPath>
+    </Reference>
     <Reference Include="sapnco">
       <HintPath>..\Dependencies\sapnco.dll</HintPath>
     </Reference>
@@ -61,20 +64,18 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="TransformationHelpers">
-      <HintPath>..\TransformationHelpers\bin\Debug\TransformationHelpers.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\BOM.cs" />
-    <Compile Include="Classes\CharacteristicHandler.cs" />
-    <Compile Include="Classes\Classification\Characteristics.cs" />
-    <Compile Include="Classes\ClassSearch.cs" />
+    <Compile Include="Classes\BOM\BOM.cs" />
+    <Compile Include="Classes\Classification\Characteristics\CharacteristicContainer.cs" />
+    <Compile Include="Classes\Classification\Characteristics\CharacteristicInformation.cs" />
+    <Compile Include="Classes\Classification\Characteristics\CharacteristicMethods.cs" />
+    <Compile Include="Classes\Classification\ClassSearch.cs" />
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Documents.cs" />
     <Compile Include="Classes\FetchData.cs" />
     <Compile Include="Classes\Constructors.cs" />
-    <Compile Include="Classes\Materials.cs" />
+    <Compile Include="Classes\Material\Informations.cs" />
     <Compile Include="Classes\UsingDirectives.cs" />
     <Compile Include="Classes\WBS.cs" />
     <Compile Include="Interfaces\IParameters.cs" />

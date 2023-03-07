@@ -6,7 +6,7 @@ namespace SAPRFC.Classes
 {
     public partial class Functions
     {
-        public BaseResponse<bool> BOMExists(string Material)
+        public BaseRFCResponse<bool> BOMExists(string Material)
         {
             DataTable check = new DataTable();
             try
@@ -16,7 +16,7 @@ namespace SAPRFC.Classes
 
                 if(check.Rows.Count is (0))
                 {
-                    return new BaseResponse<bool>()
+                    return new BaseRFCResponse<bool>()
                     {
                         Data = false,
                         Message = $"Message : {ResponseStatus.Empty.Message}. No material match at MAST table.",
@@ -28,21 +28,21 @@ namespace SAPRFC.Classes
             catch (Exception ex)
             {
 
-                return new BaseResponse<bool>()
+                return new BaseRFCResponse<bool>()
                 {
                     Data = false,
                     Message = $"Message : {ResponseStatus.RFCError.Message}. Exception : {ex.Message}",
                     StatusCode = ResponseStatus.RFCError
                 };
             }
-            return new BaseResponse<bool>()
+            return new BaseRFCResponse<bool>()
             {
                 Data = true,
                 Message = $"Message : {ResponseStatus.Success.Message}. Material has been found as BOM mantain. Infos: Plant :{check.AsEnumerable().Select(S=> S.Field<string>("WERKS")).ElementAt(0)} / Alternative BOM : {check.AsEnumerable().Select(S => S.Field<string>("STLAL")).ElementAt(0)} ",
                 StatusCode = ResponseStatus.RFCError
             };
         }
-        public BaseResponse<DataSet> ReadBOM(string Material, DateTime ValidFrom, DateTime ValidTo, string Plant = null, string AlternativeBOM = null,string ChangeNumber = null,string RevisionLevel = null, string BOMUsage = "1")
+        public BaseRFCResponse<DataSet> ReadBOM(string Material, DateTime ValidFrom, DateTime ValidTo, string Plant = null, string AlternativeBOM = null,string ChangeNumber = null,string RevisionLevel = null, string BOMUsage = "1")
         {
             DataSet BOMResponse = new DataSet();
             try
@@ -56,7 +56,7 @@ namespace SAPRFC.Classes
                     IRfcFunction Function = RFCRepo.CreateFunction("CSAP_MAT_BOM_READ");
                     if(string.IsNullOrEmpty(Material))
                     {
-                        return new BaseResponse<DataSet>()
+                        return new BaseRFCResponse<DataSet>()
                         {
                             Data = null,
                             Message = ResponseStatus.InvalidParameters.Message,
@@ -104,7 +104,7 @@ namespace SAPRFC.Classes
                         try
                         {
                             RFCReadParameters.MAKT.SetWhereClauses($"MATNR =  '{Constants.MaterialSeparator}{item}' AND SPRAS = '{SAPLanguages.Portuguese.SPRAS_CODE}' ", true);
-                            BaseResponse<DataTable> maraDescr = ReadingTable(RFCReadParameters.MAKT);
+                            BaseRFCResponse<DataTable> maraDescr = ReadingTable(RFCReadParameters.MAKT);
                             MaterialNames.Merge(maraDescr.Data);
                         }
                         catch
@@ -137,7 +137,7 @@ namespace SAPRFC.Classes
                                      }).ToList();
 
 
-                    DataTable FinalItems = Helpers.Data.Transformation.LINQResultToDataTable<dynamic>(TableJoin);
+                    DataTable FinalItems = RuntimeHelpers.Transformations.DataTables.LINQResultToDataTable<dynamic>(TableJoin);
 
                     FinalItems.Columns.Add("Internal_BOM",typeof(bool));
 
@@ -171,7 +171,7 @@ namespace SAPRFC.Classes
             catch (Exception ex)
             {
 
-                return new BaseResponse<DataSet>()
+                return new BaseRFCResponse<DataSet>()
                 {
                     Data = BOMResponse,
                     Message = $"Message : {ResponseStatus.RFCError.Message}. Exception : {ex.Message}",
@@ -180,7 +180,7 @@ namespace SAPRFC.Classes
                 };
             }
 
-            return new BaseResponse<DataSet>()
+            return new BaseRFCResponse<DataSet>()
             {
                 Data = BOMResponse,
                 Message = ResponseStatus.Success.Message,

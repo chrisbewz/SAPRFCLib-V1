@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAPRFCLib", "SAPRFCLib.csproj", "{4A714A2B-387D-4B3E-ABBA-5FA5F3361963}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAPRFCLib.Core", "SAPRFCLib.Core\SAPRFCLib.Core.csproj", "{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{4A714A2B-387D-4B3E-ABBA-5FA5F3361963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A714A2B-387D-4B3E-ABBA-5FA5F3361963}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A714A2B-387D-4B3E-ABBA-5FA5F3361963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

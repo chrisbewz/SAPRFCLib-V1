@@ -10,7 +10,7 @@ namespace SAPRFC.Classes
         public RfcDestination rfcDestination { get; set; }
         private JObject Parameters;
         
-        public BaseResponse<Dictionary<string,string>> GetMatData(string MaterialNumber,string SearchOption = "DEFAULT")
+        public BaseRFCResponse<Dictionary<string,string>> GetMatData(string MaterialNumber,string SearchOption = "DEFAULT")
         {
             string QueryType = "MATERIAL";
             Parameters[QueryType]["OPTIONS"]["QUERY_STR"] = $"MATNR = '{Constants.MaterialSeparator}{MaterialNumber}'";
@@ -20,7 +20,7 @@ namespace SAPRFC.Classes
         
         [Obsolete("Obsolete method.Call MaterialsInformation instead")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public BaseResponse<Dictionary<string,string>> GetMaterialDescription(string MaterialNumber,string SearchOption = "DEFAULT")
+        public BaseRFCResponse<Dictionary<string,string>> GetMaterialDescription(string MaterialNumber,string SearchOption = "DEFAULT")
         {
             string QueryType = "MATERIALDESC";
             Parameters[QueryType]["OPTIONS"]["QUERY_STR"] = $"MATNR = '{Constants.MaterialSeparator}{MaterialNumber}'";
@@ -51,7 +51,7 @@ namespace SAPRFC.Classes
 
         }
         
-        public BaseResponse<DataTable> MaterialsInformation(List<string> MaterialNumbers,string SearchOption="DEFAULT")
+        public BaseRFCResponse<DataTable> MaterialsInformation(List<string> MaterialNumbers,string SearchOption="DEFAULT")
         {
             var MAKT_PARAMS = RFCReadParameters.MAKT;
             
@@ -62,7 +62,7 @@ namespace SAPRFC.Classes
                 "RFC_READ_TABLE","Multiple");
         }
         
-        public BaseResponse<Dictionary<string, DataTable>> ReadMaterial(string Material)
+        public BaseRFCResponse<Dictionary<string, DataTable>> ReadMaterial(string Material)
         {
             Dictionary<string, DataTable> DataReturn = new Dictionary<string, DataTable>();
 
@@ -85,7 +85,7 @@ namespace SAPRFC.Classes
             catch (Exception ex)
             {
 
-                return new BaseResponse<Dictionary<string, DataTable>>
+                return new BaseRFCResponse<Dictionary<string, DataTable>>
                 {
                     Data = null,
                     Message = $"Message:{ResponseStatus.RFCError.Message}",
@@ -94,7 +94,7 @@ namespace SAPRFC.Classes
             }
 
 
-            return new BaseResponse<Dictionary<string, DataTable>>
+            return new BaseRFCResponse<Dictionary<string, DataTable>>
             {
                 Data = DataReturn,
                 Message = ResponseStatus.Success.Message,

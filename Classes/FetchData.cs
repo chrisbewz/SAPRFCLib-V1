@@ -3,7 +3,7 @@
     
     public partial class Functions
     {
-        public BaseResponse<Dictionary<string, string>> ReadTable(JObject Parameters, string QueryID, List<string> ClauseArgs = null, string TableReader = "RFC_READ_TABLE", string ParametersType = "DEFAULT",string Clauses = "Single")
+        public BaseRFCResponse<Dictionary<string, string>> ReadTable(JObject Parameters, string QueryID, List<string> ClauseArgs = null, string TableReader = "RFC_READ_TABLE", string ParametersType = "DEFAULT",string Clauses = "Single")
         {
             Dictionary<string, string> DataTableReturn = new Dictionary<string, string>();
 
@@ -81,7 +81,7 @@
                     }
                     else if (Parameters[QueryID]["FIELDS"] is null)
                     {
-                        return new BaseResponse<Dictionary<string, string>>
+                        return new BaseRFCResponse<Dictionary<string, string>>
                         {
                             Data = null,
                             StatusCode = ResponseStatus.InvalidParameters,
@@ -91,7 +91,7 @@
                     }
                     else if (Parameters[QueryID]["TABLE"] is null)
                     {
-                        return new BaseResponse<Dictionary<string, string>>
+                        return new BaseRFCResponse<Dictionary<string, string>>
                         {
                             Data = null,
                             StatusCode = ResponseStatus.TableNotExist,
@@ -101,7 +101,7 @@
                     }
                     else if (Parameters[QueryID]["OPTIONS"] is null)
                     {
-                        return new BaseResponse<Dictionary<string, string>>
+                        return new BaseRFCResponse<Dictionary<string, string>>
                         {
                             Data = null,
                             StatusCode = ResponseStatus.InvalidParameters,
@@ -142,7 +142,7 @@
             catch (Exception ex)
             {
 
-                return new BaseResponse<Dictionary<string, string>>
+                return new BaseRFCResponse<Dictionary<string, string>>
                 {
                     Data = DataTableReturn,
                     StatusCode = ResponseStatus.RFCError,
@@ -150,7 +150,7 @@
                 };
             }
 
-            return new BaseResponse<Dictionary<string, string>>
+            return new BaseRFCResponse<Dictionary<string, string>>
             {
                 Data = DataTableReturn,
                 StatusCode = ResponseStatus.Success,
@@ -159,7 +159,7 @@
             };
         }
 
-        public BaseResponse<DataTable> ReadingTable(RFCReadParameters Parameters, string QueryString = null, string FieldSelection = "DEFAULT",  string TableReader = "RFC_READ_TABLE", string ReadMode = "Single")
+        public BaseRFCResponse<DataTable> ReadingTable(RFCReadParameters Parameters, string QueryString = null, string FieldSelection = "DEFAULT",  string TableReader = "RFC_READ_TABLE", string ReadMode = "Single")
         {
             DataTable ReturnData = new DataTable();
 
@@ -201,7 +201,7 @@
                             }
                             catch
                             {
-                                return new BaseResponse<DataTable>()
+                                return new BaseRFCResponse<DataTable>()
                                 {
                                     Data = null,
                                     Message = ResponseStatus.InvalidParameters.Message,
@@ -232,7 +232,7 @@
                     }
                     else
                     {
-                        return new BaseResponse<DataTable>()
+                        return new BaseRFCResponse<DataTable>()
                         {
                             Data = null,
                             Message = $"{ResponseStatus.InvalidParameters.Message}. Empty parameters are not allowed for security.",
@@ -285,7 +285,7 @@
             }
             catch (Exception ex)
             {
-                return new BaseResponse<DataTable>()
+                return new BaseRFCResponse<DataTable>()
                 {
                     Data = null,
                     Message = $"Message : {ResponseStatus.RFCError.Message}. Exception description: {ex.Message}",
@@ -293,14 +293,14 @@
                 };
             }
 
-            return new BaseResponse<DataTable>()
+            return new BaseRFCResponse<DataTable>()
             {
                 Data = ReturnData,
                 Message = $"Status : {ResponseStatus.Success.Message}. {ReturnData.Rows.Count} rows fetched.",
                 StatusCode = ResponseStatus.RFCError
             };
         }
-        public BaseResponse<DataTable> TableFromReadTable(JObject Parameters, string QueryID, List<string> ClauseArgs = null, string TableReader = "RFC_READ_TABLE", string ParametersType = "DEFAULT", string Clauses = "Single")
+        public BaseRFCResponse<DataTable> TableFromReadTable(JObject Parameters, string QueryID, List<string> ClauseArgs = null, string TableReader = "RFC_READ_TABLE", string ParametersType = "DEFAULT", string Clauses = "Single")
         {
             DataTable ReturnData = new DataTable();
 
@@ -377,7 +377,7 @@
                     }
                     else if (Parameters[QueryID]["FIELDS"] is null)
                     {
-                        return new BaseResponse<DataTable>
+                        return new BaseRFCResponse<DataTable>
                         {
                             Data = null,
                             StatusCode = ResponseStatus.InvalidParameters,
@@ -387,7 +387,7 @@
                     }
                     else if (Parameters[QueryID]["TABLE"] is null)
                     {
-                        return new BaseResponse<DataTable>
+                        return new BaseRFCResponse<DataTable>
                         {
                             Data = null,
                             StatusCode = ResponseStatus.TableNotExist,
@@ -397,7 +397,7 @@
                     }
                     else if (Parameters[QueryID]["OPTIONS"] is null)
                     {
-                        return new BaseResponse<DataTable>
+                        return new BaseRFCResponse<DataTable>
                         {
                             Data = null,
                             StatusCode = ResponseStatus.InvalidParameters,
@@ -449,7 +449,7 @@
             catch (Exception ex)
             {
 
-                return new BaseResponse<DataTable>
+                return new BaseRFCResponse<DataTable>
                 {
                     Data = null,
                     StatusCode = ResponseStatus.RFCError,
@@ -457,7 +457,7 @@
                 };
             }
 
-            return new BaseResponse<DataTable>
+            return new BaseRFCResponse<DataTable>
             {
                 Data = ReturnData,
                 StatusCode = ResponseStatus.Success,

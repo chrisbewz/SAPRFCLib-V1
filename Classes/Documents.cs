@@ -1,12 +1,11 @@
 ﻿using GenericTypes.Documents;
-using Helpers.Data;
 
 
 namespace SAPRFC.Classes
 {
     public partial class Functions
     {
-        public BaseResponse<DataTable> DocumentsOfMaterial(string Material, string TargetTable = "MARA")
+        public BaseRFCResponse<DataTable> DocumentsOfMaterial(string Material, string TargetTable = "MARA")
         {
             IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_DOCUMENT_GETOBJECTDOCS ");
 
@@ -22,7 +21,7 @@ namespace SAPRFC.Classes
             }
             catch (Exception e)
             {
-                return new BaseResponse<DataTable>()
+                return new BaseRFCResponse<DataTable>()
                 {
                     Data = null,
                     Message = $"Message : {ResponseStatus.RFCError.Message}. Exception : {e.Message}",
@@ -31,7 +30,7 @@ namespace SAPRFC.Classes
                 };
             }
 
-            return new BaseResponse<DataTable>()
+            return new BaseRFCResponse<DataTable>()
             {
                 Data = TableParsing.ConvertRFCTable(Function.GetTable("DOCUMENTLIST")),
                 Message = ResponseStatus.Success.Message,
@@ -41,7 +40,7 @@ namespace SAPRFC.Classes
 
         }
         //Considering just basic data passed as arguments
-        public BaseResponse<DataSet> DocumentInformation(Document DocData)
+        public BaseRFCResponse<DataSet> DocumentInformation(Document DocData)
         {
             IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_DOCUMENT_GETDETAIL2");
             //Setting Parameters
@@ -58,7 +57,7 @@ namespace SAPRFC.Classes
                 else
                 {
                     
-                    return new BaseResponse<DataSet>()
+                    return new BaseRFCResponse<DataSet>()
                     {
                         Data = null,Message = "Document number with null assignment is not allowed",StatusCode = ResponseStatus.InvalidParameters
                     };
@@ -73,7 +72,7 @@ namespace SAPRFC.Classes
                 else
                 {
 
-                    return new BaseResponse<DataSet>()
+                    return new BaseRFCResponse<DataSet>()
                     {
                         Data = null,
                         Message = "Document without version assignment is not allowed",
@@ -101,7 +100,7 @@ namespace SAPRFC.Classes
                 }
                 else
                 {
-                    return new BaseResponse<DataSet>()
+                    return new BaseRFCResponse<DataSet>()
                     {
                         Data = null,
                         Message = "Document without type assignment is not allowed",
@@ -132,13 +131,13 @@ namespace SAPRFC.Classes
                     CREATE_DATA = x.Field<string>("CREATED_AT")
                 }).ToList();
                 
-                DataTable TableData = Transformation.LINQResultToDataTable(filesData);
+                DataTable TableData = RuntimeHelpers.Transformations.DataTables.LINQResultToDataTable(filesData);
                 Response.Tables.Add(TableData);
             }
             
             catch (Exception ex)
             {
-                return new BaseResponse<DataSet>()
+                return new BaseRFCResponse<DataSet>()
                 {
                     Data = null,
                     Message = $"Message :{ResponseStatus.RFCError.Message}. Exception thrown : {ex.Message}",
@@ -146,7 +145,7 @@ namespace SAPRFC.Classes
                 };
             }
 
-            return new BaseResponse<DataSet>()
+            return new BaseRFCResponse<DataSet>()
             {
                 Data = Response,
                 Message =

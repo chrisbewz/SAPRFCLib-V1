@@ -6,15 +6,15 @@ namespace SAPRFC.Classes
 {
     public partial class Functions
     {
-        public async Task<DataSet> SearchObjectsAsync( int maxhits,string clsname, string clstype, char allvalues = 'X',bool noauth = true, char mafid = 'O', bool externalview = true,DataTable SelectionCriteria = null)
+        public async Task<BaseRFCResponse<DataSet>> SearchObjectsAsync( int maxhits,string clsname, string clstype, char allvalues = 'X',bool noauth = true, char mafid = 'O', bool externalview = true,DataTable SelectionCriteria = null)
         {
             DataSet res = new DataSet();
 
             IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
             IRfcTable OptionsTable = Function.GetTable("IT_SELECTION_TABLE");
-
-            await Task.Run((() =>
-            {
+            
+             BaseRFCResponse<DataSet> asyncFetch = await Task.Run((() =>
+                {
                 if (!(SelectionCriteria is null || SelectionCriteria.Rows.Count.Equals(0)))
                 {
                     foreach (DataRow item in SelectionCriteria.Rows)
@@ -44,31 +44,59 @@ namespace SAPRFC.Classes
                 Function.SetValue("I_MAFID", mafid);
                 Function.SetValue("I_ALL_VALUES", allvalues);
 
-                Function.Invoke(rfcDestination);
+                try
+                {
+                    Function.Invoke(rfcDestination);
+                }
+                catch (RfcAbapException e)
+                {
+                    return new BaseRFCResponse<DataSet>()
+                    {
+                        Data = null,
+                        StatusCode = ResponseStatus.RFCError,
+                        ReturnCode = -1,
+                        Message = e.Message
+                    };
+                }
+                catch (Exception e)
+                {
+                    return new BaseRFCResponse<DataSet>()
+                    {
+                        Data = null,
+                        StatusCode = ResponseStatus.RFCError,
+                        ReturnCode = -2,
+                        Message = e.Message
+                    };
+                }
+                DataTable SelectionTable = TableParsing.ConvertRFCTable(Function.GetTable("IT_SELECTION_TABLE"));
+                DataTable FoundObj1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_OBJECTS"));
+                DataTable FoundCharac1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_VALUES"));
+                DataTable FoundObj2 = TableParsing.ConvertRFCTable(Function.GetTable("ET_OBJECTS_EXTERNAL_VIEW"));
+                DataTable FoundCharac2 = TableParsing.ConvertRFCTable(Function.GetTable("ET_VALUES_EXTERNAL_VIEW"));
+
+                res.Tables.Add(SelectionTable);
+                res.Tables.Add(FoundObj1);
+                res.Tables.Add(FoundObj2);
+                res.Tables.Add(FoundCharac1);
+                res.Tables.Add(FoundCharac2);
+
+                return new BaseRFCResponse<DataSet>()
+                {
+                    Data = res,
+                    StatusCode = ResponseStatus.Success,
+                    Message = "SuccessFull call.",
+                    ReturnCode = 0
+                };
             }));
-
-
-            DataTable SelectionTable = TableParsing.ConvertRFCTable(Function.GetTable("IT_SELECTION_TABLE"));
-            DataTable FoundObj1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_OBJECTS"));
-            DataTable FoundCharac1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_VALUES"));
-            DataTable FoundObj2 = TableParsing.ConvertRFCTable(Function.GetTable("ET_OBJECTS_EXTERNAL_VIEW"));
-            DataTable FoundCharac2 = TableParsing.ConvertRFCTable(Function.GetTable("ET_VALUES_EXTERNAL_VIEW"));
-
-            res.Tables.Add(SelectionTable);
-            res.Tables.Add(FoundObj1);
-            res.Tables.Add(FoundObj2);
-            res.Tables.Add(FoundCharac1);
-            res.Tables.Add(FoundCharac2);
-
-            return res;
+             return asyncFetch;
         }
-        public DataSet SearchObjects( int maxhits,string clsname, string clstype, char allvalues = 'X',bool noauth = true, char mafid = 'O', bool externalview = true,DataTable SelectionCriteria = null)
+        public BaseRFCResponse<DataSet> SearchObjects( int maxhits,string clsname, string clstype, char allvalues = 'X',bool noauth = true, char mafid = 'O', bool externalview = true,DataTable SelectionCriteria = null)
         {
             DataSet res = new DataSet();
 
             IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
             IRfcTable OptionsTable = Function.GetTable("IT_SELECTION_TABLE");
-
+            
             if (!(SelectionCriteria is null || SelectionCriteria.Rows.Count.Equals(0)))
             {
                 foreach (DataRow item in SelectionCriteria.Rows)
@@ -98,8 +126,30 @@ namespace SAPRFC.Classes
             Function.SetValue("I_MAFID", mafid);
             Function.SetValue("I_ALL_VALUES", allvalues);
 
-            Function.Invoke(rfcDestination);
-
+            try
+            {
+                Function.Invoke(rfcDestination);
+            }
+            catch (RfcAbapException e)
+            {
+                return new BaseRFCResponse<DataSet>()
+                {
+                    Data = null,
+                    StatusCode = ResponseStatus.RFCError,
+                    ReturnCode = -1,
+                    Message = e.Message
+                };
+            }
+            catch (Exception e)
+            {
+                return new BaseRFCResponse<DataSet>()
+                {
+                    Data = null,
+                    StatusCode = ResponseStatus.RFCError,
+                    ReturnCode = -2,
+                    Message = e.Message
+                };
+            }
             DataTable SelectionTable = TableParsing.ConvertRFCTable(Function.GetTable("IT_SELECTION_TABLE"));
             DataTable FoundObj1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_OBJECTS"));
             DataTable FoundCharac1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_VALUES"));
@@ -111,10 +161,16 @@ namespace SAPRFC.Classes
             res.Tables.Add(FoundObj2);
             res.Tables.Add(FoundCharac1);
             res.Tables.Add(FoundCharac2);
-
-            return res;
+            
+            return new BaseRFCResponse<DataSet>()
+            {
+                Data = res,
+                StatusCode = ResponseStatus.Success,
+                Message = "SuccessFull call.",
+                ReturnCode = 0
+            };
         }
-        public BaseResponse<DataSet> ClassObjects(string ClassType, string ClassName,Dictionary<string,string> SelectionParameters = null,string MaxHits = "999",bool IgnoreOptions = true)
+        public BaseRFCResponse<DataSet> ClassObjects(string ClassType, string ClassName,Dictionary<string,string> SelectionParameters = null,string MaxHits = "999",bool IgnoreOptions = true)
         { 
             DataSet DataReturn = new DataSet();
 
@@ -134,7 +190,7 @@ namespace SAPRFC.Classes
             {
                 IRfcTable OptionsCriteria = Function.GetTable("IT_SELECTION_TABLE");
                 OptionsCriteria.Append();
-
+                
                 if (SelectionParameters is null)
                 {
                     throw new NullReferenceException();
@@ -168,13 +224,13 @@ namespace SAPRFC.Classes
             DataReturn.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("ET_VALUES_EXTERNAL_VIEW")));
             DataReturn.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("IT_SELECTION_TABLE")));
 
-            return new BaseResponse<DataSet>()
+            return new BaseRFCResponse<DataSet>()
             {
                 Data = DataReturn,
 
             };
         }
-        public BaseResponse<DataSet> GetMaterialInformation(string material, string classType, string className, string objTable = "MARA")
+        public BaseRFCResponse<DataSet> GetMaterialInformation(string material, string classType, string className, string objTable = "MARA")
         {
             IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_OBJCL_GETDETAIL");
 
@@ -197,7 +253,7 @@ namespace SAPRFC.Classes
             result.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("ALLOCVALUESCHAR")));
             result.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("ALLOCVALUESCURR")));
 
-            return new BaseResponse<DataSet>()
+            return new BaseRFCResponse<DataSet>()
             {
                 Data = result
             };
@@ -209,7 +265,7 @@ namespace SAPRFC.Classes
             
         }
 
-        public BaseResponse<DataSet> ClassGetDetail(string classType, string classNumber, SAPLanguages languageIsoCode = null,SAPLanguages languageSAPCode = null)
+        public BaseRFCResponse<DataSet> ClassGetDetail(string classType, string classNumber, SAPLanguages languageIsoCode = null,SAPLanguages languageSAPCode = null)
         {
             IRfcFunction _function = rfcDestination.Repository.CreateFunction("BAPI_CLASS_GETDETAIL");
             
@@ -231,7 +287,7 @@ namespace SAPRFC.Classes
                 }
             };
 
-            return new BaseResponse<DataSet>()
+            return new BaseRFCResponse<DataSet>()
             {
                 Data = response,
                 Message = $"Success fetch class information data",
@@ -240,6 +296,6 @@ namespace SAPRFC.Classes
 
 
         }
-
+        
     }
 }

@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAPRFCLib", "SAPRFCLib.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAPRFCLib.Core", "SAPRFCLib.Core\SAPRFCLib.Core.csproj", "{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAPRFCLib.Types", "SAPRFCLib.Types\SAPRFCLib.Types.csproj", "{9F409E01-03E6-4A2E-A62F-B0132D848E33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C47DA6F7-1B98-48F7-9D92-6692EAA92E74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F409E01-03E6-4A2E-A62F-B0132D848E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F409E01-03E6-4A2E-A62F-B0132D848E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F409E01-03E6-4A2E-A62F-B0132D848E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F409E01-03E6-4A2E-A62F-B0132D848E33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

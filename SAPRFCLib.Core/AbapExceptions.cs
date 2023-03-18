@@ -1,10 +1,13 @@
-﻿using RuntimeHelpers;
+﻿using System.ComponentModel;
+using RuntimeHelpers;
 using RuntimeHelpers.Mapping;
 
 namespace SAPRFCLib.Core
 {
+    [Description("Class for defining and raising SAP ABAP Interface specific exception information.")]
     public abstract class AbapExceptions : GenericEnumeration
     {
+        #region ExposedAccessors
 
         public static readonly AbapExceptions InternalExecutionException = new AbapInternalException();
         public static readonly AbapExceptions ProcessInexistentException = new AbapProcessInexistentException();
@@ -50,8 +53,21 @@ namespace SAPRFCLib.Core
         public static readonly AbapExceptions UnspecifiedAutoPolicyException = new AbapUnspecifiedAutoPolicyException();
         public static readonly AbapExceptions EmptyAutoSelectorException = new AbapEmptyAutoSelectorException();
         public static readonly AbapExceptions UnavailableServiceElementException = new AbapUnavailableServiceElementException();
+        public static readonly AbapExceptions ImproperServiceDataException = new AbapImproperServiceDataException();
+        public static readonly AbapExceptions EmptyNoteException = new AbapEmptyNoteException();
+        public static readonly AbapExceptions EmptyTaskIdException = new AbapEmptyTaskIdException();
+        public static readonly AbapExceptions InvalidTaskFromIdException = new AbapInvalidTaskFromIdException();
+        public static readonly AbapExceptions IllegitIdChangeException = new AbapIllegitIdChangeException();
+        public static readonly AbapExceptions InvalidValidationResultException = new AbapInvalidValidationResultException();
+        public static readonly AbapExceptions InvalidEntityIdException = new AbapInvalidEntityIdException();
+        public static readonly AbapExceptions InvalidTypeException = new AbapInvalidTypeException();
+        public static readonly AbapExceptions InvalidStateException = new AbapInvalidStateException();
+        public static readonly AbapExceptions InvalidLicenseException = new AbapInvalidLicenseException();
+        public static readonly AbapExceptions CustomParameterParsingException = new AbapCustomParameterParsingException();
 
+        #endregion
 
+        #region Private Exception Classes
 
         public AbapExceptions(int value, string name) : base(value, name)
         {
@@ -61,7 +77,7 @@ namespace SAPRFCLib.Core
         public abstract int AbapCode { get; }
         public abstract string AbapName { get; }
         
-        private class AbapInternalException : AbapExceptions
+        private sealed class AbapInternalException : AbapExceptions
         {
 
             public AbapInternalException() : base(1, "AbapInternalException")
@@ -76,7 +92,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_ACC_INTERNAL_ERROR ";
         }
         
-        private class AbapProcessInexistentException : AbapExceptions
+        private sealed class AbapProcessInexistentException : AbapExceptions
         {
 
             public AbapProcessInexistentException() : base(2, "AbapProcessInexistentException")
@@ -91,7 +107,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_PROCESS  ";
         }
         
-        private class AbapInternalInvalidOperationException : AbapExceptions
+        private sealed class AbapInternalInvalidOperationException : AbapExceptions
         {
 
             public AbapInternalInvalidOperationException() : base(3, "AbaInvalidOperationException")
@@ -106,7 +122,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_INVALID_OPERATION_TYPE   ";
         }
         
-        private class AbapExecutionException : AbapExceptions
+        private sealed class AbapExecutionException : AbapExceptions
         {
 
             public AbapExecutionException() : base(4, "AbapExecutionException")
@@ -121,7 +137,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_OPERATION_EXECUTION_ERROR";
         }
         
-        private class AbapInvalidConfigurationException : AbapExceptions
+        private sealed class AbapInvalidConfigurationException : AbapExceptions
         {
 
             public AbapInvalidConfigurationException() : base(5, "AbapInvalidConfigurationException")
@@ -136,7 +152,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_INVALID_CONFIGURATION_DATA ";
         }
         
-        private class AbapPermissionException : AbapExceptions
+        private sealed class AbapPermissionException : AbapExceptions
         {
 
             public AbapPermissionException() : base(6, "AbapPermissionException")
@@ -151,7 +167,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_USER_HAS_NO_PERMISSION";
         }
         
-        private class AbapHostnameException : AbapExceptions
+        private sealed class AbapHostnameException : AbapExceptions
         {
 
             public AbapHostnameException() : base(7, "AbapHostnameException")
@@ -166,7 +182,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_COMPUTER_SYSTEM  ";
         }
         
-        private class AbapLockedUserException : AbapExceptions
+        private sealed class AbapLockedUserException : AbapExceptions
         {
 
             public AbapLockedUserException() : base(8, "AbapLockedUserException")
@@ -181,7 +197,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_COMPUTER_SYSTEM_ALREADY_LOCKED   ";
         }
         
-        private class AbapInconsistentLockException : AbapExceptions
+        private sealed class AbapInconsistentLockException : AbapExceptions
         {
 
             public AbapInconsistentLockException() : base(9, "AbapInconsistentLockException")
@@ -196,7 +212,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_COMPUTER_SYSTEM_LOCK_FAILURE    ";
         }
         
-        private class AbapUnlockUserException : AbapExceptions
+        private sealed class AbapUnlockUserException : AbapExceptions
         {
 
             public AbapUnlockUserException() : base(10, "AbapUnlockUserException")
@@ -211,7 +227,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_COMPUTER_SYSTEM_UNLOCK_FAILURE     ";
         }
         
-        private class AbapInvalidUserComputerException : AbapExceptions
+        private sealed class AbapInvalidUserComputerException : AbapExceptions
         {
 
             public AbapInvalidUserComputerException() : base(11, "AbapInvalidUserComputerException")
@@ -226,7 +242,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_COMPUTER_SYSTEM_HOSTNAME";
         }
         
-        private class AbapInvalidHostNameException : AbapExceptions
+        private sealed class AbapInvalidHostNameException : AbapExceptions
         {
 
             public AbapInvalidHostNameException() : base(12, "AbapInvalidHostNameException")
@@ -241,7 +257,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_OR_NULL_COMPUTER_SYSTEM_HOSTNAME ";
         }
         
-        private class AbapAgentCredentialsMissingException : AbapExceptions
+        private sealed class AbapAgentCredentialsMissingException : AbapExceptions
         {
 
             public AbapAgentCredentialsMissingException() : base(13, "AbapAgentCredentialsMissingException")
@@ -256,7 +272,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_HOST_AGENT_CREDENTIALS_MISSING";
         }
         
-        private class AbapMissingNetworkConfigurationException : AbapExceptions
+        private sealed class AbapMissingNetworkConfigurationException : AbapExceptions
         {
 
             public AbapMissingNetworkConfigurationException() : base(14, "AbapMissingNetworkConfigurationException")
@@ -271,7 +287,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NETWORK_CONFIGURATION_MISSING ";
         }
         
-        private class AbapInvalidInterfaceException : AbapExceptions
+        private sealed class AbapInvalidInterfaceException : AbapExceptions
         {
 
             public AbapInvalidInterfaceException() : base(16, "AbapInvalidInterfaceException")
@@ -286,7 +302,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_OR_NULL_NETWORK_INTERFACE_ID  ";
         }
         
-        private class AbapInvalidNetConnectionException : AbapExceptions
+        private sealed class AbapInvalidNetConnectionException : AbapExceptions
         {
 
             public AbapInvalidNetConnectionException() : base(17, "AbapInvalidNetConnectionException")
@@ -301,7 +317,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_NETWORK   ";
         }
         
-        private class AbapNullOrEmptyNetConnectionException : AbapExceptions
+        private sealed class AbapNullOrEmptyNetConnectionException : AbapExceptions
         {
 
             public AbapNullOrEmptyNetConnectionException() : base(18, "AbapNullOrEmptyNetConnectionException")
@@ -316,7 +332,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_OR_NULL_NETWORK_ID";
         }
         
-        private class AbapServerReferenceException : AbapExceptions
+        private sealed class AbapServerReferenceException : AbapExceptions
         {
 
             public AbapServerReferenceException() : base(19, "AbapServerReferenceException")
@@ -331,7 +347,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_REFERENCED_SERVERS ";
         }
         
-        private class AbapServiceReferenceException : AbapExceptions
+        private sealed class AbapServiceReferenceException : AbapExceptions
         {
 
             public AbapServiceReferenceException() : base(20, "AbapServiceReferenceException")
@@ -346,7 +362,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_REFERENCED_SERVICES  ";
         }
         
-        private class AbapIsLockedConnectionException : AbapExceptions
+        private sealed class AbapIsLockedConnectionException : AbapExceptions
         {
 
             public AbapIsLockedConnectionException() : base(20, "AbapIsLockedConnectionException")
@@ -361,7 +377,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_NETWORK_ALREADY_LOCKED   ";
         }
         
-        private class AbapNetworkLockFailedException : AbapExceptions
+        private sealed class AbapNetworkLockFailedException : AbapExceptions
         {
 
             public AbapNetworkLockFailedException() : base(22, "AbapNetworkLockFailedException")
@@ -376,7 +392,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_NETWORK_LOCK_FAILURE    ";
         }
         
-        private class AbapNetworkUnlockFailedException : AbapExceptions
+        private sealed class AbapNetworkUnlockFailedException : AbapExceptions
         {
 
             public AbapNetworkUnlockFailedException() : base(23, "AbapNetworkLockFailedException")
@@ -391,7 +407,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_NETWORK_UNLOCK_FAILURE";
         }
         
-        private class AbapEmptyPoolException : AbapExceptions
+        private sealed class AbapEmptyPoolException : AbapExceptions
         {
 
             public AbapEmptyPoolException() : base(24, "AbapEmptyPoolException")
@@ -406,7 +422,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_OR_NULL_POOL_ID ";
         }
         
-        private class AbapInvalidPoolException : AbapExceptions
+        private sealed class AbapInvalidPoolException : AbapExceptions
         {
 
             public AbapInvalidPoolException() : base(25, "AbapInvalidPoolException")
@@ -421,7 +437,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_POOL  ";
         }
         
-        private class AbapPoolAlreadyLockedException : AbapExceptions
+        private sealed class AbapPoolAlreadyLockedException : AbapExceptions
         {
 
             public AbapPoolAlreadyLockedException() : base(26, "AbapPoolAlreadyLockedException")
@@ -436,7 +452,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_POOL_ALREADY_LOCKED";
         }
         
-        private class AbapPoolLockFailedException : AbapExceptions
+        private sealed class AbapPoolLockFailedException : AbapExceptions
         {
 
             public AbapPoolLockFailedException() : base(27, "AbapPoolLockFailedException")
@@ -451,7 +467,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_POOL_LOCK_FAILURE ";
         }
         
-        private class AbapPoolUnlockFailedException : AbapExceptions
+        private sealed class AbapPoolUnlockFailedException : AbapExceptions
         {
 
             public AbapPoolUnlockFailedException() : base(28, "AbapPoolUnlockFailedException")
@@ -466,7 +482,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_POOL_UNLOCK_FAILURE  ";
         }
         
-        private class AbapPoolInvalidServiceException : AbapExceptions
+        private sealed class AbapPoolInvalidServiceException : AbapExceptions
         {
 
             public AbapPoolInvalidServiceException() : base(29, "AbapPoolInvalidServiceException")
@@ -481,7 +497,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_INVALID_SERVICE_ID   ";
         }
         
-        private class AbapNullServiceReferenceException : AbapExceptions
+        private sealed class AbapNullServiceReferenceException : AbapExceptions
         {
 
             public AbapNullServiceReferenceException() : base(30, "AbapNullServiceReferenceException")
@@ -496,7 +512,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_SERVICE    ";
         }
         
-        private class AbapNullServiceUnexpectedException : AbapExceptions
+        private sealed class AbapNullServiceUnexpectedException : AbapExceptions
         {
 
             public AbapNullServiceUnexpectedException() : base(31, "AbapNullServiceUnexpectedException")
@@ -511,7 +527,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_OR_NULL_SERVICE_ID     ";
         }
         
-        private class AbapServiceLockedException : AbapExceptions
+        private sealed class AbapServiceLockedException : AbapExceptions
         {
 
             public AbapServiceLockedException() : base(32, "AbapServiceLockedException")
@@ -526,7 +542,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_SERVICE_LOCKED      ";
         }
         
-        private class AbapEmptyOperationException : AbapExceptions
+        private sealed class AbapEmptyOperationException : AbapExceptions
         {
 
             public AbapEmptyOperationException() : base(33, "AbapEmptyOperationException")
@@ -541,7 +557,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_OPERATION_REQUEST";
         }
         
-        private class AbapInvalidOperationRequestException : AbapExceptions
+        private sealed class AbapInvalidOperationRequestException : AbapExceptions
         {
 
             public AbapInvalidOperationRequestException() : base(34, "AbapInvalidOperationRequestException")
@@ -556,7 +572,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_INVALID_OPERATION_REQUEST";
         }
         
-        private class AbapEmptyOperationParameterException : AbapExceptions
+        private sealed class AbapEmptyOperationParameterException : AbapExceptions
         {
 
             public AbapEmptyOperationParameterException() : base(35, "AbapEmptyOperationParameterException")
@@ -571,7 +587,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_OPERATION_REQUEST_ITEM ";
         }
         
-        private class AbapMissingServiceException : AbapExceptions
+        private sealed class AbapMissingServiceException : AbapExceptions
         {
 
             public AbapMissingServiceException() : base(36, "AbapMissingServiceException")
@@ -586,7 +602,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_DEPEDENT_SERVICES_MISSING  ";
         }
         
-        private class AbapInvalidResourceException : AbapExceptions
+        private sealed class AbapInvalidResourceException : AbapExceptions
         {
 
             public AbapInvalidResourceException() : base(37, "AbapInvalidResourceException")
@@ -601,7 +617,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_SELECTED_SERVICE_OR_RESOURCE_INVALID   ";
         }
         
-        private class AbapInstanceAlertException : AbapExceptions
+        private sealed class AbapInstanceAlertException : AbapExceptions
         {
 
             public AbapInstanceAlertException() : base(38, "AbapInstanceAlertException")
@@ -616,7 +632,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_SERVICE_HAS_ALERT    ";
         }
         
-        private class AbapNullProcessException : AbapExceptions
+        private sealed class AbapNullProcessException : AbapExceptions
         {
 
             public AbapNullProcessException() : base(39, "AbapNullProcessException")
@@ -631,7 +647,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NULL_OR_EMPTY_PROCESS_ID     ";
         }
         
-        private class AbapInstanceElementException : AbapExceptions
+        private sealed class AbapInstanceElementException : AbapExceptions
         {
 
             public AbapInstanceElementException() : base(40, "AbapInstanceElementException")
@@ -646,7 +662,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NOT_SERVICE_ELEMENT      ";
         }
         
-        private class AbapInsuficientRequirementsException : AbapExceptions
+        private sealed class AbapInsuficientRequirementsException : AbapExceptions
         {
 
             public AbapInsuficientRequirementsException() : base(41, "AbapInsuficientRequirementsException")
@@ -661,7 +677,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_UNFULFILL_REQ       ";
         }
         
-        private class AbapInvalidAutoPolicyException : AbapExceptions
+        private sealed class AbapInvalidAutoPolicyException : AbapExceptions
         {
 
             public AbapInvalidAutoPolicyException() : base(42, "AbapInvalidAutoPolicyException")
@@ -676,7 +692,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_INVALID_AUTO_SELECTION_POLICY        ";
         }
         
-        private class AbapUnspecifiedAutoPolicyException : AbapExceptions
+        private sealed class AbapUnspecifiedAutoPolicyException : AbapExceptions
         {
 
             public AbapUnspecifiedAutoPolicyException() : base(43, "AbapUnspecifiedAutoPolicyException")
@@ -691,7 +707,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NULL_OR_EMPTY_AUTO_SELECTION_POLICY         ";
         }
         
-        private class AbapEmptyAutoSelectorException : AbapExceptions
+        private sealed class AbapEmptyAutoSelectorException : AbapExceptions
         {
 
             public AbapEmptyAutoSelectorException() : base(44, "AbapEmptyAutoSelectorException")
@@ -706,7 +722,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_AUTO_SELECTOR_REQUEST          ";
         }
         
-        private class AbapUnavailableServiceElementException : AbapExceptions
+        private sealed class AbapUnavailableServiceElementException : AbapExceptions
         {
 
             public AbapUnavailableServiceElementException() : base(45, "AbapUnavailableServiceElementException")
@@ -721,7 +737,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NOT_ADAPTIVE_SERVICE_ELEMENT           ";
         }
         
-        private class AbapImproperServiceDataException : AbapExceptions
+        private sealed class AbapImproperServiceDataException : AbapExceptions
         {
 
             public AbapImproperServiceDataException() : base(46, "AbapImproperServiceDataException")
@@ -736,7 +752,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_IMPROPER_DATA            ";
         }
         
-        private class AbapEmptyNoteException : AbapExceptions
+        private sealed class AbapEmptyNoteException : AbapExceptions
         {
 
             public AbapEmptyNoteException() : base(47, "AbapEmptyNoteException")
@@ -751,7 +767,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_EMPTY_NOTE";
         }
         
-        private class AbapEmptyTaskIdException : AbapExceptions
+        private sealed class AbapEmptyTaskIdException : AbapExceptions
         {
 
             public AbapEmptyTaskIdException() : base(48, "AbapEmptyTaskIdException")
@@ -766,7 +782,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NULL_OR_EMPTY_TASK_ID ";
         }
         
-        private class AbapInvalidTaskFromIdException : AbapExceptions
+        private sealed class AbapInvalidTaskFromIdException : AbapExceptions
         {
 
             public AbapInvalidTaskFromIdException() : base(49, "AbapInvalidTaskFromIdException")
@@ -781,7 +797,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_TASK";
         }
         
-        private class AbapIllegitIdChangeException : AbapExceptions
+        private sealed class AbapIllegitIdChangeException : AbapExceptions
         {
 
             public AbapIllegitIdChangeException() : base(50, "AbapIllegitIdChangeException")
@@ -796,7 +812,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_ILLEGITIMATE_CHANGE_ID_USAGE ";
         }
         
-        private class AbapInvalidValidationResultException : AbapExceptions
+        private sealed class AbapInvalidValidationResultException : AbapExceptions
         {
 
             public AbapInvalidValidationResultException() : base(51, "AbapInvalidValidationResultException")
@@ -811,7 +827,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NO_SUCH_VALIDATIONRESULT  ";
         }
         
-        private class AbapInvalidEntityIdException : AbapExceptions
+        private sealed class AbapInvalidEntityIdException : AbapExceptions
         {
 
             public AbapInvalidEntityIdException() : base(52, "AbapInvalidEntityIdException")
@@ -826,7 +842,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NULL_OR_EMPTY_ENTITY_ID";
         }
         
-        private class AbapInvalidTypeException : AbapExceptions
+        private sealed class AbapInvalidTypeException : AbapExceptions
         {
 
             public AbapInvalidTypeException() : base(53, "AbapInvalidTypeException")
@@ -841,7 +857,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NULL_OR_EMPTY_ENTITY_TYPE ";
         }
         
-        private class AbapInvalidStateException : AbapExceptions
+        private sealed class AbapInvalidStateException : AbapExceptions
         {
 
             public AbapInvalidStateException() : base(54, "AbapInvalidStateException")
@@ -856,7 +872,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_NULL_OR_EMPTY_PROCESS_STATE  ";
         }
         
-        private class AbapInvalidLicenseException : AbapExceptions
+        private sealed class AbapInvalidLicenseException : AbapExceptions
         {
 
             public AbapInvalidLicenseException() : base(55, "AbapInvalidLicenseException")
@@ -871,7 +887,7 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_ENTERPRISE_LICENSE_REQUIRED   ";
         }
         
-        private class AbapCustomParameterParsingException : AbapExceptions
+        private sealed class AbapCustomParameterParsingException : AbapExceptions
         {
 
             public AbapCustomParameterParsingException() : base(56, "AbapCustomParameterParsingException")
@@ -886,6 +902,8 @@ namespace SAPRFCLib.Core
             public override string AbapName => "ERROR_CODE_RETRIEVE_CUSTOM_PARAMETER    ";
         }
         
+
+        #endregion       
     }
     
 }

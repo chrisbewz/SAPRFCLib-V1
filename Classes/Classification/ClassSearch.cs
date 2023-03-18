@@ -90,6 +90,84 @@ namespace SAPRFC.Classes
             }));
              return asyncFetch;
         }
+        
+        public BaseRFCResponse<DataSet> SearchObjectsCompact( int maxhits,string clsname, string clstype, char allvalues = 'X',bool noauth = true, char mafid = 'O', bool externalview = true,DataTable SelectionCriteria = null)
+        {
+            DataSet res = new DataSet();
+
+            IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
+            IRfcTable OptionsTable = Function.GetTable("IT_SELECTION_TABLE");
+            
+            if (!(SelectionCriteria is null || SelectionCriteria.Rows.Count.Equals(0)))
+            {
+                foreach (DataRow item in SelectionCriteria.Rows)
+                {
+                    if (item.Field<string>("VALUE") is null || item.Field<string>("VALUE").Equals(string.Empty)) continue;
+
+                    OptionsTable.Append();
+                    OptionsTable.SetValue("CHARACTERISTIC", item["CHARACTERISTIC"].ToString());
+                    OptionsTable.SetValue("VALUE", item["VALUE"].ToString());
+                }
+            }
+
+            Function.SetValue("I_CLASS", clsname);
+            Function.SetValue("I_CLASSTYPE", clstype);
+            Function.SetValue("I_MAXIMUM_NUMBER_OF_HITS", maxhits);
+
+            if (externalview)
+            {
+                Function.SetValue("I_EXTERNAL_VIEW", 'X');
+            }
+
+            if (noauth)
+            {
+                Function.SetValue("I_NO_AUTH_CHECK", 'X');
+            }
+
+            Function.SetValue("I_MAFID", mafid);
+            Function.SetValue("I_ALL_VALUES", allvalues);
+
+            try
+            {
+                Function.Invoke(rfcDestination);
+            }
+            catch (RfcAbapException e)
+            {
+                return new BaseRFCResponse<DataSet>()
+                {
+                    Data = null,
+                    StatusCode = ResponseStatus.RFCError,
+                    ReturnCode = -1,
+                    Message = e.Message
+                };
+            }
+            catch (Exception e)
+            {
+                return new BaseRFCResponse<DataSet>()
+                {
+                    Data = null,
+                    StatusCode = ResponseStatus.RFCError,
+                    ReturnCode = -2,
+                    Message = e.Message
+                };
+            }
+            DataTable SelectionTable = TableParsing.ConvertRFCTable(Function.GetTable("IT_SELECTION_TABLE"));
+            DataTable FoundObj1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_OBJECTS"));
+            DataTable FoundCharac1 = TableParsing.ConvertRFCTable(Function.GetTable("ET_VALUES"));
+            
+
+            res.Tables.Add(SelectionTable);
+            res.Tables.Add(FoundObj1);
+            res.Tables.Add(FoundCharac1);
+
+            return new BaseRFCResponse<DataSet>()
+            {
+                Data = res,
+                StatusCode = ResponseStatus.Success,
+                Message = "SuccessFull call.",
+                ReturnCode = 0
+            };
+        }
         public BaseRFCResponse<DataSet> SearchObjects( int maxhits,string clsname, string clstype, char allvalues = 'X',bool noauth = true, char mafid = 'O', bool externalview = true,DataTable SelectionCriteria = null)
         {
             DataSet res = new DataSet();

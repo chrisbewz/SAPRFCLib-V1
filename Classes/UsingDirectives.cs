@@ -8,4 +8,5 @@ global using QueryStructures.RFCStructures;
 global using System.Linq;
 global using GenericTypes.Languages;
 global using System.Data;
+global using RuntimeHelpers;
 global using TableParsing = ParsingUtils.DataTables.Parsing;

@@ -48,10 +48,10 @@ namespace SAPRFC.Classes
             try
             {
                 //Casting RFC Table Response to DataSet Instance
-                if (rfcDestination != null)
+                if (Destination != null)
                 {
 
-                    RfcRepository RFCRepo = rfcDestination.Repository;
+                    RfcRepository RFCRepo = Destination.Repository;
 
                     IRfcFunction Function = RFCRepo.CreateFunction("CSAP_MAT_BOM_READ");
                     if(string.IsNullOrEmpty(Material))
@@ -91,7 +91,7 @@ namespace SAPRFC.Classes
                         Function.SetValue("CHANGE_NO", ChangeNumber);
                     }
                     
-                    Function.Invoke(rfcDestination);
+                    Function.Invoke(Destination);
 
                     //Fetching BOM Names
                     DataTable bomItems = TableParsing.ConvertRFCTable(Function.GetTable("T_STPO"));

@@ -10,7 +10,7 @@ namespace SAPRFC.Classes
         {
             DataSet res = new DataSet();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
+            IRfcFunction Function = Destination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
             IRfcTable OptionsTable = Function.GetTable("IT_SELECTION_TABLE");
             
              BaseRFCResponse<DataSet> asyncFetch = await Task.Run((() =>
@@ -46,7 +46,7 @@ namespace SAPRFC.Classes
 
                 try
                 {
-                    Function.Invoke(rfcDestination);
+                    Function.Invoke(Destination);
                 }
                 catch (RfcAbapException e)
                 {
@@ -95,7 +95,7 @@ namespace SAPRFC.Classes
         {
             DataSet res = new DataSet();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
+            IRfcFunction Function = Destination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
             IRfcTable OptionsTable = Function.GetTable("IT_SELECTION_TABLE");
             
             if (!(SelectionCriteria is null || SelectionCriteria.Rows.Count.Equals(0)))
@@ -129,7 +129,7 @@ namespace SAPRFC.Classes
 
             try
             {
-                Function.Invoke(rfcDestination);
+                Function.Invoke(Destination);
             }
             catch (RfcAbapException e)
             {
@@ -172,7 +172,7 @@ namespace SAPRFC.Classes
         {
             DataSet res = new DataSet();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
+            IRfcFunction Function = Destination.Repository.CreateFunction("CLS_IVIEWS_SEARCH_OBJECTS ");
             IRfcTable OptionsTable = Function.GetTable("IT_SELECTION_TABLE");
             
             if (!(SelectionCriteria is null || SelectionCriteria.Rows.Count.Equals(0)))
@@ -206,7 +206,7 @@ namespace SAPRFC.Classes
 
             try
             {
-                Function.Invoke(rfcDestination);
+                Function.Invoke(Destination);
             }
             catch (RfcAbapException e)
             {
@@ -252,7 +252,7 @@ namespace SAPRFC.Classes
         { 
             DataSet DataReturn = new DataSet();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("CLSX_SEARCH_OBJECTS");
+            IRfcFunction Function = Destination.Repository.CreateFunction("CLSX_SEARCH_OBJECTS");
             
             //Commom Parameters
             Function.SetValue("I_CLASS",ClassName);
@@ -293,7 +293,7 @@ namespace SAPRFC.Classes
                 }
             }
             
-            Function.Invoke(rfcDestination);
+            Function.Invoke(Destination);
             
 
             DataReturn.Tables.Add(TableParsing.ConvertRFCTable(Function.GetTable("ET_OBJECTS")));
@@ -310,7 +310,7 @@ namespace SAPRFC.Classes
         }
         public BaseRFCResponse<DataSet> GetMaterialInformation(string material, string classType, string className, string objTable = "MARA")
         {
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_OBJCL_GETDETAIL");
+            IRfcFunction Function = Destination.Repository.CreateFunction("BAPI_OBJCL_GETDETAIL");
 
             // RFCReadParameters readParameters = RFCReadParameters.AUSP;
             // readParameters.InsertFields(new List<string> { "CUOBF", "MATNR" }, "TEMP");
@@ -323,7 +323,7 @@ namespace SAPRFC.Classes
             Function.SetValue("CLASSTYPE", classType);
             Function.SetValue("CLASSNUM", className);
 
-            Function.Invoke(rfcDestination);
+            Function.Invoke(Destination);
 
             DataSet result = new DataSet();
 
@@ -345,14 +345,14 @@ namespace SAPRFC.Classes
 
         public BaseRFCResponse<DataSet> ClassGetDetail(string classType, string classNumber, SAPLanguages languageIsoCode = null,SAPLanguages languageSAPCode = null)
         {
-            IRfcFunction _function = rfcDestination.Repository.CreateFunction("BAPI_CLASS_GETDETAIL");
+            IRfcFunction _function = Destination.Repository.CreateFunction("BAPI_CLASS_GETDETAIL");
             
             if(languageIsoCode != null){ _function.SetValue("LANGUISO",$"{languageIsoCode.LAIZO_CODE}");}
             if(languageSAPCode != null) _function.SetValue("LANGUINT",$"{languageIsoCode.SPRAS_CODE}");
             _function.SetValue("CLASSTYPE",$"{classType}");
             _function.SetValue("CLASSNUM",$"{classNumber}");
             
-            _function.Invoke(rfcDestination);
+            _function.Invoke(Destination);
 
             DataSet response = new DataSet()
             {

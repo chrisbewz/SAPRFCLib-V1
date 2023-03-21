@@ -7,7 +7,7 @@
         {
             Dictionary<string, string> DataTableReturn = new Dictionary<string, string>();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction(TableReader);
+            IRfcFunction Function = Destination.Repository.CreateFunction(TableReader);
 
             IRfcTable SAPFieldsTable = Function.GetTable("FIELDS");
             SAPFieldsTable.Append();
@@ -109,7 +109,7 @@
 
                         };
                     }
-                    Function.Invoke(rfcDestination);
+                    Function.Invoke(Destination);
 
                     IRfcTable DataReadTable = Function.GetTable("DATA");
 
@@ -165,7 +165,7 @@
 
             try
             {
-                IRfcFunction Function = rfcDestination.Repository.CreateFunction(TableReader);
+                IRfcFunction Function = Destination.Repository.CreateFunction(TableReader);
 
                 IRfcTable SAPFieldsTable = Function.GetTable("FIELDS");
                 SAPFieldsTable.Append();
@@ -246,7 +246,7 @@
                 Function.SetValue("ROWSKIPS", Parameters.RowSkip.ToString());
                 Function.SetValue("DELIMITER", Parameters.GetDelimiter());
                 
-                Function.Invoke(rfcDestination);
+                Function.Invoke(Destination);
 
                 IRfcTable DataReadTable = Function.GetTable("DATA");
 
@@ -304,7 +304,7 @@
         {
             DataTable ReturnData = new DataTable();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction(TableReader);
+            IRfcFunction Function = Destination.Repository.CreateFunction(TableReader);
 
             IRfcTable SAPFieldsTable = Function.GetTable("FIELDS");
             SAPFieldsTable.Append();
@@ -405,7 +405,7 @@
 
                         };
                     }
-                    Function.Invoke(rfcDestination);
+                    Function.Invoke(Destination);
 
                     IRfcTable DataReadTable = Function.GetTable("DATA");
                     Dictionary<string, string> ResponseData = new Dictionary<string, string>();

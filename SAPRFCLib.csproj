@@ -111,6 +111,10 @@
     <Content Include="Configuration\Queries.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="SAPRFCLib.Targets\SAPRFCLib.Targets.csproj">
+      <Project>{32610295-ba14-492c-a7ac-855c9f9f1d9c}</Project>
+      <Name>SAPRFCLib.Targets</Name>
+    </ProjectReference>
     <ProjectReference Include="SAPRFCLib.Types\SAPRFCLib.Types.csproj">
       <Project>{9f409e01-03e6-4a2e-a62f-b0132d848e33}</Project>
       <Name>SAPRFCLib.Types</Name>

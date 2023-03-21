@@ -4,7 +4,7 @@ namespace SAPRFCLib.Interfaces
 {
     public interface IFunctions
     {
-        RfcDestination rfcDestination { get; set; }
+        RfcDestination Destination { get; set; }
         BaseRFCResponse<DataTable> DocumentsOfMaterial(string Material, string TargetTable);
         BaseRFCResponse<DataSet> GetCharacteristics(string CharacteristicName);
         BaseRFCResponse<DataSet> GetMaterialInformation(string material, string classType, string className, string objTable = "MARA");

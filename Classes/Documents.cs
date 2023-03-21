@@ -7,7 +7,7 @@ namespace SAPRFC.Classes
     {
         public BaseRFCResponse<DataTable> DocumentsOfMaterial(string Material, string TargetTable = "MARA")
         {
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_DOCUMENT_GETOBJECTDOCS ");
+            IRfcFunction Function = Destination.Repository.CreateFunction("BAPI_DOCUMENT_GETOBJECTDOCS ");
 
             try
             {
@@ -17,7 +17,7 @@ namespace SAPRFC.Classes
                 //Specifying type of material to search from. MARA means that function will findo only documents referring to MARA object numbers known as customer materials.
                 Function.SetValue("OBJECTTYPE",TargetTable);
             
-                Function.Invoke((rfcDestination));
+                Function.Invoke((Destination));
             }
             catch (Exception e)
             {
@@ -42,7 +42,7 @@ namespace SAPRFC.Classes
         //Considering just basic data passed as arguments
         public BaseRFCResponse<DataSet> DocumentInformation(Document DocData)
         {
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("BAPI_DOCUMENT_GETDETAIL2");
+            IRfcFunction Function = Destination.Repository.CreateFunction("BAPI_DOCUMENT_GETDETAIL2");
             //Setting Parameters
             DataSet Response = new DataSet();
             DataTable ResponseTable = new DataTable();
@@ -116,7 +116,7 @@ namespace SAPRFC.Classes
                 Function.SetParameterActive("GETSTRUCTURE",true);
                 Function.SetParameterActive("GETWHEREUSED",true);
                 
-                Function.Invoke(rfcDestination);
+                Function.Invoke(Destination);
                 
                 //Fetching all needed response tables
 

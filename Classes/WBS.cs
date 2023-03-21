@@ -13,14 +13,14 @@ namespace SAPRFC.Classes
             try
             {
                 //Casting RFC Table Response to DataSet Instance
-                if (rfcDestination != null)
+                if (Destination != null)
                 {
 
-                    RfcRepository RFCRepo = rfcDestination.Repository;
+                    RfcRepository RFCRepo = Destination.Repository;
 
                     IRfcFunction Function = RFCRepo.CreateFunction("BAPI_PROJECT_GETINFO");
                     Function.SetValue("PROJECT_DEFINITION", WBSelements);
-                    Function.Invoke(rfcDestination);
+                    Function.Invoke(Destination);
                     Response.Merge(TableParsing.ConvertRFCTable(Function.GetTable("E_WBS_ELEMENT_TABLE")),true);
                 }
 

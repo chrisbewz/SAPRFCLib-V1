@@ -37,3 +37,5 @@ C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\System.Memory.
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\SAPRFCLib.Targets.dll
+C:\Users\Christianb\RiderProjects\Development\SAPRFCLib\bin\Debug\SAPRFCLib.Targets.pdb

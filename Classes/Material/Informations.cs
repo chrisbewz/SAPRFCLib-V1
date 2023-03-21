@@ -7,7 +7,6 @@ namespace SAPRFC.Classes
 {
     public partial class Functions: IFunctions
     {
-        public RfcDestination rfcDestination { get; set; }
         private JObject Parameters;
         
         public BaseRFCResponse<Dictionary<string,string>> GetMatData(string MaterialNumber,string SearchOption = "DEFAULT")
@@ -66,10 +65,10 @@ namespace SAPRFC.Classes
         {
             Dictionary<string, DataTable> DataReturn = new Dictionary<string, DataTable>();
 
-            IRfcFunction Function = rfcDestination.Repository.CreateFunction("RFC_GET_MATERIAL_DATA");
+            IRfcFunction Function = Destination.Repository.CreateFunction("RFC_GET_MATERIAL_DATA");
 
             Function.SetValue("I_MATERIAL", Material);
-            Function.Invoke(rfcDestination);
+            Function.Invoke(Destination);
 
             try
             {
